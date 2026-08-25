@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Moon, Sun } from "lucide-react";
+import chateauAsset from "@/assets/chateau-mukhrani.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -65,7 +67,7 @@ function SectionTitle({ children }: { children: string }) {
   );
 }
 
-function Countdown() {
+function Countdown({ onHero = false }: { onHero?: boolean }) {
   const c = useCountdown(WEDDING_DATE);
   const items = [
     { label: "დღე", value: c?.days },
@@ -78,10 +80,18 @@ function Countdown() {
     <div className="grid w-full max-w-xl grid-cols-4 gap-2 sm:gap-6">
       {items.map((i) => (
         <div key={i.label} className="flex flex-col items-center gap-2">
-          <span className="font-display text-4xl text-foreground sm:text-5xl">
+          <span
+            className={`font-display text-4xl sm:text-5xl ${
+              onHero ? "text-white" : "text-foreground"
+            }`}
+          >
             {i.value === undefined ? "—" : String(i.value).padStart(2, "0")}
           </span>
-          <span className="text-[0.55rem] uppercase tracking-[0.35em] text-muted-foreground">
+          <span
+            className={`text-[0.55rem] uppercase tracking-[0.35em] ${
+              onHero ? "text-white/75" : "text-muted-foreground"
+            }`}
+          >
             {i.label}
           </span>
         </div>
@@ -154,6 +164,24 @@ function Rsvp() {
   );
 }
 
+function NightToggle() {
+  const [night, setNight] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("night", night);
+  }, [night]);
+
+  return (
+    <button
+      onClick={() => setNight((n) => !n)}
+      aria-label={night ? "დღის რეჟიმი" : "ღამის რეჟიმი"}
+      className="fixed right-5 top-5 z-[60] flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-black/25 text-white backdrop-blur-sm transition-colors hover:bg-black/40"
+    >
+      {night ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </button>
+  );
+}
+
 function Index() {
   const [introDone, setIntroDone] = useState(false);
 
@@ -166,24 +194,36 @@ function Index() {
 
   return (
     <>
+      <NightToggle />
       {!introDone && <VideoIntro onFinish={() => setIntroDone(true)} />}
 
       <main className="min-h-screen bg-background">
         {/* Hero */}
-        <section className="flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-24 text-center">
-          <p className="text-[0.6rem] uppercase tracking-[0.5em] text-muted-foreground">
-            ჩვენი ქორწილი
-          </p>
-          <h1 className="font-display text-6xl leading-[1.05] text-foreground sm:text-7xl md:text-8xl">
-            ნინი &amp; ტატო
-          </h1>
-          <div className="hairline w-24" />
-          <div className="flex flex-col items-center gap-2 text-sm tracking-[0.2em] text-muted-foreground">
-            <span>17 სექტემბერი</span>
-            <span>შატო მუხრანი</span>
+        <section className="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden px-6 py-24 text-center">
+          <img
+            src={chateauAsset.url}
+            alt="შატო მუხრანის აკვარელური ილუსტრაცია"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/35 transition-colors duration-1000 [.night_&]:bg-[#0b1020]/65" />
+          <div className="starfield" aria-hidden />
+
+          <div className="relative flex flex-col items-center gap-8">
+            <p className="text-[0.6rem] uppercase tracking-[0.5em] text-white/80">
+              გეპატიჟებით
+            </p>
+            <h1 className="font-display text-6xl leading-[1.05] text-white sm:text-7xl md:text-8xl">
+              ნინი &amp; ტატო
+            </h1>
+            <div className="hairline w-24" />
+            <div className="flex flex-col items-center gap-2 text-sm tracking-[0.2em] text-white/85">
+              <span>17 სექტემბერი</span>
+              <span>შატო მუხრანი</span>
+            </div>
+            <Countdown onHero />
           </div>
-          <Countdown />
         </section>
+
 
         {/* Location */}
         <section className="border-t border-border px-6 py-24">
