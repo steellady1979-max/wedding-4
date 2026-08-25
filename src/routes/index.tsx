@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Moon, Sun } from "lucide-react";
+import chateauAsset from "@/assets/chateau-mukhrani.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
