@@ -142,3 +142,53 @@
     color: var(--color-foreground);
   }
 }
+
+/* ── Wedding design system: Nini & Tato ───────────────────────────── */
+@font-face {
+  font-family: "AnaKalandadze";
+  src: url("/__l5e/assets-v1/6522fd0b-857c-4d8e-9c5a-6e021b6449c5/ana-kalandadze.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@theme inline {
+  --font-display: "AnaKalandadze", serif;
+  --font-sans: "Noto Sans Georgian", ui-sans-serif, sans-serif;
+  --color-gold: var(--gold);
+  --color-sand: var(--sand);
+}
+
+:root {
+  --radius: 0.25rem;
+  --background: oklch(0.982 0.008 85);
+  --foreground: oklch(0.32 0.018 60);
+  --card: oklch(0.993 0.005 85);
+  --card-foreground: oklch(0.32 0.018 60);
+  --popover: oklch(0.993 0.005 85);
+  --popover-foreground: oklch(0.32 0.018 60);
+  --primary: oklch(0.42 0.026 55);
+  --primary-foreground: oklch(0.982 0.008 85);
+  --secondary: oklch(0.945 0.014 84);
+  --secondary-foreground: oklch(0.38 0.02 58);
+  --muted: oklch(0.955 0.012 84);
+  --muted-foreground: oklch(0.55 0.018 62);
+  --accent: oklch(0.93 0.022 82);
+  --accent-foreground: oklch(0.36 0.02 58);
+  --border: oklch(0.9 0.014 80);
+  --input: oklch(0.9 0.014 80);
+  --ring: oklch(0.7 0.03 75);
+  --gold: oklch(0.68 0.058 78);
+  --sand: oklch(0.9 0.02 82);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    letter-spacing: 0.01em;
+  }
+}
+
+@utility hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
