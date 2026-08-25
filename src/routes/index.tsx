@@ -65,7 +65,7 @@ function SectionTitle({ children }: { children: string }) {
   );
 }
 
-function Countdown() {
+function Countdown({ onHero = false }: { onHero?: boolean }) {
   const c = useCountdown(WEDDING_DATE);
   const items = [
     { label: "დღე", value: c?.days },
@@ -78,10 +78,18 @@ function Countdown() {
     <div className="grid w-full max-w-xl grid-cols-4 gap-2 sm:gap-6">
       {items.map((i) => (
         <div key={i.label} className="flex flex-col items-center gap-2">
-          <span className="font-display text-4xl text-foreground sm:text-5xl">
+          <span
+            className={`font-display text-4xl sm:text-5xl ${
+              onHero ? "text-white" : "text-foreground"
+            }`}
+          >
             {i.value === undefined ? "—" : String(i.value).padStart(2, "0")}
           </span>
-          <span className="text-[0.55rem] uppercase tracking-[0.35em] text-muted-foreground">
+          <span
+            className={`text-[0.55rem] uppercase tracking-[0.35em] ${
+              onHero ? "text-white/75" : "text-muted-foreground"
+            }`}
+          >
             {i.label}
           </span>
         </div>
