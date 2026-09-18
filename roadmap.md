@@ -10,4 +10,4 @@
 - [x] Replace intro video and hero photo with new uploads
 - [x] Update date, venue, countdown, map, schedule, RSVP label, and footer
 - [x] Add schedule illustrations and lazy loading
-- [ ] Verify mobile and desktop views, intro transition, map link, and RSVP form
+- [x] Verify mobile and desktop views, intro transition, map link, and RSVP form
