@@ -4,3 +4,10 @@
 - [x] Rename couple to ლევანი & თამთა across the site and meta tags
 - [x] Format header row (bold + frozen) in the new spreadsheet
 - [x] End-to-end test: submit RSVP via the site, confirm row in sheet, clean up test row
+
+## Visual update — 18 October, Villa Mosavali
+
+- [ ] Replace intro video and hero photo with new uploads
+- [ ] Update date, venue, countdown, map, schedule, RSVP label, and footer
+- [ ] Add schedule illustrations and lazy loading
+- [ ] Verify mobile and desktop views, intro transition, map link, and RSVP form
