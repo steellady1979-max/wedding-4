@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
+import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Moon, Sun } from "lucide-react";
