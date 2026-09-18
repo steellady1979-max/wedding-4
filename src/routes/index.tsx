@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
 import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Moon, Sun } from "lucide-react";
+import { Pause, Play } from "lucide-react";
 import villaAsset from "@/assets/vila-mosavali.jpg.asset.json";
 import sioniAsset from "@/assets/sioni-cathedral.jpg.asset.json";
 import ceremonyAsset from "@/assets/outdoor-ceremony.jpg.asset.json";
@@ -208,26 +208,52 @@ function Rsvp() {
   );
 }
 
-function NightToggle() {
-  const [night, setNight] = useState(false);
+function MusicPlayer({ started }: { started: boolean }) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [playing, setPlaying] = useState(started);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("night", night);
-  }, [night]);
+  useEffect(() => setPlaying(started), [started]);
+
+  if (!started) return null;
+
+  const sendCommand = (command: "playVideo" | "pauseVideo") => {
+    iframeRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: "command", func: command, args: [] }),
+      "https://www.youtube.com",
+    );
+  };
 
   return (
-    <button
-      onClick={() => setNight((n) => !n)}
-      aria-label={night ? "დღის რეჟიმი" : "ღამის რეჟიმი"}
-      className="fixed right-5 top-5 z-[60] flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-black/25 text-white backdrop-blur-sm transition-colors hover:bg-black/40"
-    >
-      {night ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
+    <>
+      <iframe
+        ref={iframeRef}
+        title="საქორწილო მუსიკა"
+        src="https://www.youtube-nocookie.com/embed/J123lM0RvzM?autoplay=1&loop=1&playlist=J123lM0RvzM&enablejsapi=1&controls=0&playsinline=1"
+        allow="autoplay; encrypted-media"
+        className="pointer-events-none fixed h-px w-px opacity-0"
+      />
+      <Button
+        type="button"
+        size="icon"
+        variant="outline"
+        onClick={() => {
+          const nextPlaying = !playing;
+          sendCommand(nextPlaying ? "playVideo" : "pauseVideo");
+          setPlaying(nextPlaying);
+        }}
+        aria-label={playing ? "მუსიკის შეჩერება" : "მუსიკის ჩართვა"}
+        title={playing ? "მუსიკის შეჩერება" : "მუსიკის ჩართვა"}
+        className="fixed right-5 top-5 z-40 h-11 w-11 rounded-full border-border bg-background/90 shadow-sm"
+      >
+        {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+      </Button>
+    </>
   );
 }
 
 function Index() {
   const [introDone, setIntroDone] = useState(false);
+  const [musicStarted, setMusicStarted] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = introDone ? "" : "hidden";
@@ -238,8 +264,13 @@ function Index() {
 
   return (
     <>
-      <NightToggle />
-      {!introDone && <VideoIntro onFinish={() => setIntroDone(true)} />}
+      <MusicPlayer started={musicStarted} />
+      {!introDone && (
+        <VideoIntro
+          onFinish={() => setIntroDone(true)}
+          onFirstInteraction={() => setMusicStarted(true)}
+        />
+      )}
 
       <main className="min-h-screen bg-background">
         {/* Hero */}
@@ -250,8 +281,7 @@ function Index() {
             fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/35 transition-colors duration-1000 [.night_&]:bg-[#0b1020]/65" />
-          <div className="starfield" aria-hidden />
+          <div className="absolute inset-0 bg-foreground/35" />
 
           <div className="relative flex flex-col items-center gap-8">
             <p className="text-[0.6rem] uppercase tracking-[0.5em] text-white/80">
@@ -280,6 +310,15 @@ function Index() {
             <p className="text-sm leading-relaxed text-muted-foreground">
                ცერემონია გაიმართება ღია ცის ქვეშ.
             </p>
+            <div className="aspect-[4/3] w-full overflow-hidden border border-border sm:aspect-[16/9]">
+              <iframe
+                title="ვილა მოსავალი რუკაზე"
+                src="https://www.google.com/maps?q=Mosavali%20Event%20Hall&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-full w-full border-0"
+              />
+            </div>
             <Button
               asChild
               variant="outline"
