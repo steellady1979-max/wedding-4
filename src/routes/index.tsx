@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
+import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Moon, Sun } from "lucide-react";
@@ -103,14 +106,22 @@ function Countdown({ onHero = false }: { onHero?: boolean }) {
 function Rsvp() {
   const [name, setName] = useState("");
   const [answer, setAnswer] = useState<"yes" | "no" | null>(null);
-  const [sent, setSent] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const submit = useServerFn(submitRsvp);
 
-  if (sent) {
+  const mutation = useMutation({
+    mutationFn: () =>
+      submit({
+        data: { name: name.trim(), attending: answer ?? "no", company: honeypot },
+      }),
+  });
+
+  if (mutation.isSuccess) {
     return (
       <p className="max-w-md text-center text-sm leading-relaxed text-muted-foreground">
         {answer === "yes"
-          ? `გმადლობთ, ${name}. მოუთმენლად გელოდებით 17 სექტემბერს.`
-          : `გმადლობთ პასუხისთვის, ${name}. ვწუხვართ, რომ ვერ შეხვდებით.`}
+          ? `გმადლობთ, ${name.trim()}. მოუთმენლად გელოდებით 17 სექტემბერს.`
+          : `გმადლობთ პასუხისთვის, ${name.trim()}. ვწუხვართ, რომ ვერ შეხვდებით.`}
       </p>
     );
   }
@@ -119,7 +130,8 @@ function Rsvp() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        if (name.trim() && answer) setSent(true);
+        if (!name.trim() || !answer) return;
+        mutation.mutate();
       }}
       className="flex w-full max-w-sm flex-col items-center gap-6"
     >
@@ -129,6 +141,18 @@ function Rsvp() {
         placeholder="თქვენი სახელი"
         aria-label="თქვენი სახელი"
         className="h-12 rounded-none border-0 border-b border-border bg-transparent text-center text-base shadow-none focus-visible:ring-0"
+      />
+
+      {/* Anti-spam field: invisible to guests. */}
+      <input
+        type="text"
+        name="company"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0"
       />
 
       <div className="flex w-full gap-3">
@@ -155,11 +179,17 @@ function Rsvp() {
 
       <Button
         type="submit"
-        disabled={!name.trim() || !answer}
+        disabled={!name.trim() || !answer || mutation.isPending}
         className="h-12 w-full rounded-none text-[0.65rem] uppercase tracking-[0.35em]"
       >
-        დადასტურება
+        {mutation.isPending ? "იგზავნება…" : "დადასტურება"}
       </Button>
+
+      {mutation.isError ? (
+        <p className="text-center text-xs leading-relaxed text-destructive">
+          პასუხის შენახვა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან.
+        </p>
+      ) : null}
     </form>
   );
 }
