@@ -15,8 +15,8 @@ const rsvpInput = z.object({
 export const submitRsvp = createServerFn({ method: "POST" })
   .inputValidator((data) => rsvpInput.parse(data))
   .handler(async ({ data }) => {
-    const apiKey = process.env.LOVABLE_API_KEY;
-    const connectionKey = process.env.GOOGLE_SHEETS_API_KEY;
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    const connectionKey = process.env["GOOGLE_SHEETS_API_KEY"];
 
     if (!apiKey || !connectionKey) {
       console.error("RSVP save skipped: Google Sheets connection is not configured");
