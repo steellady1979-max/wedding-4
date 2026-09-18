@@ -24,4 +24,4 @@
 - [x] Update the 16:30, 17:00, and 18:00 schedule copy and imagery
 - [x] Replace the dress-code palette with the supplied illustration and new message
 - [x] Refine intro petals into a more natural rose-petal silhouette
-- [ ] Verify the updated sections and intro on mobile and desktop
+- [x] Verify the updated sections and intro on mobile and desktop
