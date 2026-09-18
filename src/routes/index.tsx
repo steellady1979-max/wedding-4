@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
 import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
@@ -77,6 +77,54 @@ const TIMELINE = [
     imageAlt: "ელეგანტურად გაფორმებული საქორწილო სუფრა",
   },
 ];
+
+function Reveal({
+  children,
+  className = "",
+  fromRight = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  fromRight?: boolean;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`${fromRight ? "reveal-dance" : "reveal-soft"} ${visible ? "is-visible" : ""} ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+function LandingPetals() {
+  return (
+    <div className="landing-petals" aria-hidden="true">
+      {Array.from({ length: 18 }, (_, index) => (
+        <i key={index} className="landing-petal" />
+      ))}
+    </div>
+  );
+}
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState<Date | null>(null);
@@ -303,7 +351,8 @@ function Index() {
         />
       )}
 
-      <main className="min-h-screen bg-background">
+      <main className="relative min-h-screen overflow-hidden bg-background">
+        <LandingPetals />
         {/* Hero */}
         <section className="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden px-6 py-24 text-center">
           <img
@@ -318,7 +367,7 @@ function Index() {
             <p className="text-[0.6rem] uppercase tracking-[0.5em] text-white/80">
               გეპატიჟებით
             </p>
-            <h1 className="font-display text-6xl leading-[1.05] text-white sm:text-7xl md:text-8xl">
+            <h1 className="sparkle-heading font-display text-6xl leading-[1.05] text-white sm:text-7xl md:text-8xl">
               ლევანი &amp; თამთა
             </h1>
             <div className="hairline w-24" />
@@ -335,7 +384,7 @@ function Index() {
         <section className="border-t border-border px-6 py-24">
           <div className="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center">
             <SectionTitle>ლოკაცია</SectionTitle>
-            <h2 className="font-display text-4xl text-foreground sm:text-5xl">
+            <h2 className="sparkle-heading font-display text-4xl text-foreground sm:text-5xl">
                ვილა მოსავალი
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
@@ -393,13 +442,15 @@ function Index() {
                       <h3 className="mt-1 font-display text-2xl leading-snug text-foreground sm:text-3xl">
                         {t.title}
                       </h3>
-                      <img
-                        src={t.image}
-                        alt={t.imageAlt}
-                        loading="lazy"
-                        decoding="async"
-                        className="mt-5 block h-auto w-full rounded-sm object-contain"
-                      />
+                      <Reveal className="mt-5">
+                        <img
+                          src={t.image}
+                          alt={t.imageAlt}
+                          loading="lazy"
+                          decoding="async"
+                          className="block h-auto w-full rounded-sm object-contain"
+                        />
+                      </Reveal>
                       {t.mapUrl ? (
                         <Button
                           asChild
@@ -424,19 +475,21 @@ function Index() {
         <section className="border-t border-border px-6 py-24">
           <div className="mx-auto flex max-w-xl flex-col items-center gap-8 text-center">
             <SectionTitle>დრესკოდი</SectionTitle>
-            <h2 className="font-display text-4xl text-foreground">
+            <h2 className="sparkle-heading font-display text-4xl text-foreground">
               კლასიკური ელეგანტურობა
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
               ძვირფასო სტუმრებო, გთხოვთ აირჩიოთ კლასიკური და ელეგანტური სამოსი
             </p>
-            <img
-              src={dressCodeAsset.url}
-              alt="კლასიკური და ელეგანტური საქორწილო სამოსის აკვარელური ილუსტრაცია"
-              loading="lazy"
-              decoding="async"
-              className="mt-2 h-auto w-full max-w-sm object-contain"
-            />
+            <Reveal fromRight className="mt-2 w-full max-w-sm">
+              <img
+                src={dressCodeAsset.url}
+                alt="კლასიკური და ელეგანტური საქორწილო სამოსის აკვარელური ილუსტრაცია"
+                loading="lazy"
+                decoding="async"
+                className="h-auto w-full object-contain"
+              />
+            </Reveal>
           </div>
         </section>
 
@@ -444,7 +497,7 @@ function Index() {
         <section className="border-t border-border px-6 py-24">
           <div className="mx-auto flex max-w-xl flex-col items-center gap-10 text-center">
             <SectionTitle>დასწრების დადასტურება</SectionTitle>
-            <h2 className="font-display text-4xl text-foreground">
+            <h2 className="sparkle-heading font-display text-4xl text-foreground">
               გვაცნობეთ თქვენი პასუხი
             </h2>
             <Rsvp />
