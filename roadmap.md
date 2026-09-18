@@ -37,4 +37,4 @@
 
 - [x] Replace prominent time circles with event-specific line icons
 - [x] Restyle the schedule as an airy editorial timeline with natural-size images
-- [ ] Verify the refined schedule on mobile and desktop
+- [x] Verify the refined schedule on mobile and desktop
