@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import videoAsset from "@/assets/wedding-intro.mp4.asset.json";
+import videoAsset from "@/assets/wedding-levani-tamta-intro.mp4.asset.json";
 
 export function VideoIntro({ onFinish }: { onFinish: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -16,7 +16,7 @@ export function VideoIntro({ onFinish }: { onFinish: () => void }) {
   useEffect(() => {
     videoRef.current?.play().catch(() => {});
     // Safety net: never trap the guest on the intro if the video stalls.
-    const id = window.setTimeout(finish, 12000);
+    const id = window.setTimeout(finish, 8000);
     return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -43,7 +43,7 @@ export function VideoIntro({ onFinish }: { onFinish: () => void }) {
 
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-6 bg-black/25 px-6 text-center">
         <p className="animate-fade-in text-[0.7rem] uppercase tracking-[0.55em] text-white/80">
-          17 სექტემბერი
+          18 ოქტომბერი
         </p>
         <h1 className="animate-fade-in font-display text-5xl leading-tight text-white sm:text-7xl md:text-8xl">
           ლევანი &amp; თამთა
