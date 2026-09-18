@@ -45,3 +45,9 @@
 - [x] Bring the dress-code illustration in from the right
 - [x] Add restrained headline sparkles and denser faint petals across the landing page
 - [x] Verify animations and layout on mobile and desktop
+
+## RSVP replacement
+
+- [x] Remove the attendance confirmation form
+- [x] Replace it with the supplied champagne illustration using optimized media storage
+- [x] Verify the replacement on mobile and desktop
