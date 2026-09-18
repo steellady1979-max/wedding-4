@@ -7,21 +7,23 @@ import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Moon, Sun } from "lucide-react";
-import chateauAsset from "@/assets/chateau-mukhrani.jpg.asset.json";
+import villaAsset from "@/assets/vila-mosavali.jpg.asset.json";
+import sioniAsset from "@/assets/sioni-cathedral.jpg.asset.json";
+import ceremonyAsset from "@/assets/outdoor-ceremony.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ლევანი & თამთა — 17 სექტემბერი, შატო მუხრანი" },
+      { title: "ლევანი & თამთა — 18 ოქტომბერი, ვილა მოსავალი" },
       {
         name: "description",
         content:
-          "ლევანისა და თამთას ქორწილი 17 სექტემბერს შატო მუხრანში. დღის განრიგი, დრესკოდი და დასწრების დადასტურება.",
+          "ლევანისა და თამთას ქორწილი 18 ოქტომბერს ვილა მოსავალში. დღის განრიგი, დრესკოდი და დასწრების დადასტურება.",
       },
-      { property: "og:title", content: "ლევანი & თამთა — 17 სექტემბერი" },
+      { property: "og:title", content: "ლევანი & თამთა — 18 ოქტომბერი" },
       {
         property: "og:description",
-        content: "მოგვიწვევთ ჩვენს ქორწილზე შატო მუხრანში, 17 სექტემბერს.",
+        content: "გეპატიჟებით ჩვენს ქორწილზე ვილა მოსავალში, 18 ოქტომბერს.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -30,13 +32,25 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const WEDDING_DATE = new Date("2026-09-17T17:00:00+04:00");
+const WEDDING_DATE = new Date("2026-10-18T14:00:00+04:00");
 
 const TIMELINE = [
-  { time: "17:00", title: "სტუმრების მიღება", note: "შამპანური და მისალმება" },
-  { time: "18:00", title: "ცერემონია", note: "ჩატო მუხრანის ბაღი" },
-  { time: "19:30", title: "სადილი", note: "ვახშამი და სადღეგრძელოები" },
-  { time: "22:00", title: "ცეკვა", note: "პირველი ცეკვა და მუსიკა" },
+  {
+    time: "14:00",
+    title: "ჯვრისწერა",
+    note: "თბილისი, სიონის ტაძარი",
+    image: sioniAsset.url,
+    imageAlt: "თბილისის სიონის ტაძრის აკვარელური ილუსტრაცია",
+  },
+  { time: "16:30", title: "სტუმრების დახვედრა", note: "Welcome Drink" },
+  {
+    time: "17:00",
+    title: "ხელის მოწერის ცერემონია",
+    note: "ღია ცის ქვეშ",
+    image: ceremonyAsset.url,
+    imageAlt: "ღია ცის ქვეშ ხელის მოწერის ცერემონიის აკვარელური ილუსტრაცია",
+  },
+  { time: "18:00", title: "გალა ვახშამი", note: "ვახშამი და სადღეგრძელოები" },
 ];
 
 function useCountdown(target: Date) {
@@ -120,7 +134,7 @@ function Rsvp() {
     return (
       <p className="max-w-md text-center text-sm leading-relaxed text-muted-foreground">
         {answer === "yes"
-          ? `გმადლობთ, ${name.trim()}. მოუთმენლად გელოდებით 17 სექტემბერს.`
+          ? `გმადლობთ, ${name.trim()}. მოუთმენლად გელოდებით 18 ოქტომბერს.`
           : `გმადლობთ პასუხისთვის, ${name.trim()}. ვწუხვართ, რომ ვერ შეხვდებით.`}
       </p>
     );
@@ -138,8 +152,8 @@ function Rsvp() {
       <Input
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="თქვენი სახელი"
-        aria-label="თქვენი სახელი"
+        placeholder="სახელი / გვარი"
+        aria-label="სახელი / გვარი"
         className="h-12 rounded-none border-0 border-b border-border bg-transparent text-center text-base shadow-none focus-visible:ring-0"
       />
 
@@ -231,8 +245,9 @@ function Index() {
         {/* Hero */}
         <section className="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden px-6 py-24 text-center">
           <img
-            src={chateauAsset.url}
-            alt="შატო მუხრანის აკვარელური ილუსტრაცია"
+            src={villaAsset.url}
+            alt="ვილა მოსავლის აკვარელური ილუსტრაცია"
+            fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-black/35 transition-colors duration-1000 [.night_&]:bg-[#0b1020]/65" />
@@ -247,8 +262,8 @@ function Index() {
             </h1>
             <div className="hairline w-24" />
             <div className="flex flex-col items-center gap-2 text-sm tracking-[0.2em] text-white/85">
-              <span>17 სექტემბერი</span>
-              <span>შატო მუხრანი</span>
+              <span>18 ოქტომბერი</span>
+              <span>ვილა მოსავალი</span>
             </div>
             <Countdown onHero />
           </div>
@@ -260,10 +275,10 @@ function Index() {
           <div className="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center">
             <SectionTitle>ლოკაცია</SectionTitle>
             <h2 className="font-display text-4xl text-foreground sm:text-5xl">
-              შატო მუხრანი
+               ვილა მოსავალი
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              მუხრანი, მცხეთა-მთიანეთი. ცერემონია გაიმართება ისტორიულ ბაღში.
+               ცერემონია გაიმართება ღია ცის ქვეშ.
             </p>
             <Button
               asChild
@@ -271,7 +286,7 @@ function Index() {
               className="h-12 rounded-none border-gold px-8 text-[0.65rem] uppercase tracking-[0.35em]"
             >
               <a
-                href="https://maps.google.com/?q=Chateau+Mukhrani"
+                 href="https://maps.app.goo.gl/evaofQxhjzTiQbQw8?g_st=ic"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -289,15 +304,24 @@ function Index() {
               {TIMELINE.map((t) => (
                 <li
                   key={t.time}
-                  className="flex items-baseline gap-6 border-b border-border py-6 last:border-0"
+                  className="grid grid-cols-[4rem_1fr] items-start gap-x-6 gap-y-5 border-b border-border py-8 last:border-0"
                 >
                   <span className="w-16 shrink-0 text-xs tracking-[0.2em] text-gold">
                     {t.time}
                   </span>
-                  <span className="flex-1">
+                   <span>
                     <span className="block font-display text-2xl text-foreground">
                       {t.title}
-                    </span>
+                   </span>
+                  {t.image ? (
+                    <img
+                      src={t.image}
+                      alt={t.imageAlt}
+                      loading="lazy"
+                      decoding="async"
+                      className="col-span-2 mt-1 aspect-[4/3] w-full object-cover sm:col-start-2 sm:aspect-[16/9]"
+                    />
+                  ) : null}
                     <span className="mt-1 block text-xs text-muted-foreground">
                       {t.note}
                     </span>
@@ -346,7 +370,7 @@ function Index() {
         <footer className="border-t border-border px-6 py-12 text-center">
           <p className="font-display text-2xl text-foreground">ლევანი &amp; თამთა</p>
           <p className="mt-2 text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
-            17.09 · შატო მუხრანი
+             18.10 · ვილა მოსავალი
           </p>
         </footer>
       </main>
