@@ -31,4 +31,4 @@
 - [x] Replace the dress-code illustration with the latest upload
 - [x] Redesign the schedule and preserve each image’s natural aspect ratio
 - [x] Replace the Sioni address with a direct map button
-- [ ] Verify the updated schedule on mobile and desktop
+- [x] Verify the updated schedule on mobile and desktop
