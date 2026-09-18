@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
+import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Church,
   HeartHandshake,
@@ -26,7 +30,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "ლევანისა და თამთას ქორწილი 18 ოქტომბერს ვილა მოსავალში. დღის განრიგი, ლოკაცია და დრესკოდი.",
+          "ლევანისა და თამთას ქორწილი 18 ოქტომბერს ვილა მოსავალში. დღის განრიგი, დრესკოდი და დასწრების დადასტურება.",
       },
       { property: "og:title", content: "ლევანი & თამთა — 18 ოქტომბერი" },
       {
@@ -184,6 +188,97 @@ function Countdown({ onHero = false }: { onHero?: boolean }) {
         </div>
       ))}
     </div>
+  );
+}
+
+function Rsvp() {
+  const [name, setName] = useState("");
+  const [answer, setAnswer] = useState<"yes" | "no" | null>(null);
+  const [honeypot, setHoneypot] = useState("");
+  const submit = useServerFn(submitRsvp);
+
+  const mutation = useMutation({
+    mutationFn: () =>
+      submit({
+        data: { name: name.trim(), attending: answer ?? "no", company: honeypot },
+      }),
+  });
+
+  if (mutation.isSuccess) {
+    return (
+      <p className="max-w-md text-center text-sm leading-relaxed text-muted-foreground">
+        {answer === "yes"
+          ? `გმადლობთ, ${name.trim()}. მოუთმენლად გელოდებით 18 ოქტომბერს.`
+          : `გმადლობთ პასუხისთვის, ${name.trim()}. ვწუხვართ, რომ ვერ შეხვდებით.`}
+      </p>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (!name.trim() || !answer) return;
+        mutation.mutate();
+      }}
+      className="flex w-full max-w-sm flex-col items-center gap-6"
+    >
+      <Input
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        placeholder="სახელი / გვარი"
+        aria-label="სახელი / გვარი"
+        className="h-12 rounded-none border-0 border-b border-border bg-transparent text-center text-base shadow-none focus-visible:ring-0"
+      />
+
+      <input
+        type="text"
+        name="company"
+        value={honeypot}
+        onChange={(event) => setHoneypot(event.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0"
+      />
+
+      <div className="flex w-full gap-3">
+        {(
+          [
+            { key: "yes", label: "დავესწრები" },
+            { key: "no", label: "ვერ დავესწრები" },
+          ] as const
+        ).map((option) => (
+          <Button
+            key={option.key}
+            type="button"
+            variant="outline"
+            onClick={() => setAnswer(option.key)}
+            className={`h-12 flex-1 rounded-none px-3 text-[0.65rem] uppercase tracking-[0.2em] ${
+              answer === option.key
+                ? "border-gold bg-accent text-accent-foreground"
+                : "border-border text-muted-foreground"
+            }`}
+          >
+            {option.label}
+          </Button>
+        ))}
+      </div>
+
+      <Button
+        type="submit"
+        disabled={!name.trim() || !answer || mutation.isPending}
+        className="h-12 w-full rounded-none text-[0.65rem] uppercase tracking-[0.35em]"
+      >
+        {mutation.isPending ? "იგზავნება…" : "დადასტურება"}
+      </Button>
+
+      {mutation.isError ? (
+        <p className="text-center text-xs leading-relaxed text-destructive">
+          პასუხის შენახვა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან.
+        </p>
+      ) : null}
+    </form>
   );
 }
 
@@ -399,10 +494,11 @@ function Index() {
           </div>
         </section>
 
-        {/* Celebration illustration */}
-        <section className="border-t border-border px-6 py-20">
-          <div className="mx-auto flex max-w-xl justify-center">
-            <Reveal className="w-full max-w-xs">
+        {/* RSVP */}
+        <section className="border-t border-border px-6 py-24">
+          <div className="mx-auto flex max-w-xl flex-col items-center gap-10 text-center">
+            <SectionTitle>დასწრების დადასტურება</SectionTitle>
+            <Reveal className="w-full max-w-[12rem]">
               <img
                 src={champagneTowerAsset.url}
                 alt="შამპანურის ბოკალების სადღესასწაულო ილუსტრაცია"
@@ -411,6 +507,10 @@ function Index() {
                 className="h-auto w-full object-contain"
               />
             </Reveal>
+            <h2 className="sparkle-heading font-display text-4xl text-foreground">
+              გვაცნობეთ თქვენი პასუხი
+            </h2>
+            <Rsvp />
           </div>
         </section>
 
