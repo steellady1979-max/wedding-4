@@ -12,13 +12,13 @@ import chateauAsset from "@/assets/chateau-mukhrani.jpg.asset.json";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ნინი & ტატო — 17 სექტემბერი, შატო მუხრანი" },
+      { title: "ლევანი & თამთა — 17 სექტემბერი, შატო მუხრანი" },
       {
         name: "description",
         content:
-          "ნინისა და ტატოს ქორწილი 17 სექტემბერს შატო მუხრანში. დღის განრიგი, დრესკოდი და დასწრების დადასტურება.",
+          "ლევანისა და თამთას ქორწილი 17 სექტემბერს შატო მუხრანში. დღის განრიგი, დრესკოდი და დასწრების დადასტურება.",
       },
-      { property: "og:title", content: "ნინი & ტატო — 17 სექტემბერი" },
+      { property: "og:title", content: "ლევანი & თამთა — 17 სექტემბერი" },
       {
         property: "og:description",
         content: "მოგვიწვევთ ჩვენს ქორწილზე შატო მუხრანში, 17 სექტემბერს.",
@@ -243,7 +243,7 @@ function Index() {
               გეპატიჟებით
             </p>
             <h1 className="font-display text-6xl leading-[1.05] text-white sm:text-7xl md:text-8xl">
-              ნინი &amp; ტატო
+              ლევანი &amp; თამთა
             </h1>
             <div className="hairline w-24" />
             <div className="flex flex-col items-center gap-2 text-sm tracking-[0.2em] text-white/85">
@@ -344,7 +344,7 @@ function Index() {
         </section>
 
         <footer className="border-t border-border px-6 py-12 text-center">
-          <p className="font-display text-2xl text-foreground">ნინი &amp; ტატო</p>
+          <p className="font-display text-2xl text-foreground">ლევანი &amp; თამთა</p>
           <p className="mt-2 text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
             17.09 · შატო მუხრანი
           </p>
