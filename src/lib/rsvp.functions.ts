@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const SPREADSHEET_ID = "1vUDvUPVeRLrjtdtdOBHR2wIOjUD-Krv8qzfuggK3zd0";
-const SHEET_TAB = "სტუმრები";
+const SPREADSHEET_ID = "1eg0svt0-gNpwbq9WkNjdIU2PNK6JRO8Tzd8M1DYsVCs";
+const SHEET_TAB = "1ფურცელი";
 const GATEWAY_BASE = "https://connector-gateway.lovable.dev/google_sheets/v4";
 
 const rsvpInput = z.object({
