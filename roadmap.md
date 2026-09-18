@@ -50,4 +50,4 @@
 
 - [x] Remove the attendance confirmation form
 - [x] Replace it with the supplied champagne illustration using optimized media storage
-- [ ] Verify the replacement on mobile and desktop
+- [x] Verify the replacement on mobile and desktop
