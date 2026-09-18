@@ -44,4 +44,4 @@
 - [x] Fade schedule photos in gently as they enter the screen
 - [x] Bring the dress-code illustration in from the right
 - [x] Add restrained headline sparkles and denser faint petals across the landing page
-- [ ] Verify animations and layout on mobile and desktop
+- [x] Verify animations and layout on mobile and desktop
