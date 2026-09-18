@@ -38,3 +38,10 @@
 - [x] Replace prominent time circles with event-specific line icons
 - [x] Restyle the schedule as an airy editorial timeline with natural-size images
 - [x] Verify the refined schedule on mobile and desktop
+
+## Romantic motion refinement
+
+- [x] Fade schedule photos in gently as they enter the screen
+- [x] Bring the dress-code illustration in from the right
+- [x] Add restrained headline sparkles and denser faint petals across the landing page
+- [ ] Verify animations and layout on mobile and desktop
