@@ -77,10 +77,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ნინი & ტატო" },
-      { name: "description", content: "ნინი და ტატოს ქორწილი — 17 სექტემბერი, შატო მუხრანი" },
+      { title: "ლევანი & თამთა" },
+      { name: "description", content: "ლევანი და თამთას ქორწილი — 17 სექტემბერი, შატო მუხრანი" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "ნინი & ტატო" },
+      { property: "og:title", content: "ლევანი & თამთა" },
       { property: "og:description", content: "17 სექტემბერი · შატო მუხრანი" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

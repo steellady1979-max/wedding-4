@@ -46,7 +46,7 @@ export function VideoIntro({ onFinish }: { onFinish: () => void }) {
           17 სექტემბერი
         </p>
         <h1 className="animate-fade-in font-display text-5xl leading-tight text-white sm:text-7xl md:text-8xl">
-          ნინი &amp; ტატო
+          ლევანი &amp; თამთა
         </h1>
         <div className="hairline w-28 opacity-80" />
       </div>
