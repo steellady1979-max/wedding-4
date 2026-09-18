@@ -6,13 +6,13 @@ import { VideoIntro } from "@/components/wedding/VideoIntro";
 import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Pause, Play } from "lucide-react";
+import { MapPin, Pause, Play } from "lucide-react";
 import villaAsset from "@/assets/vila-mosavali.jpg.asset.json";
 import sioniAsset from "@/assets/sioni-cathedral.jpg.asset.json";
 import ceremonyAsset from "@/assets/outdoor-ceremony.jpg.asset.json";
 import welcomeDrinksAsset from "@/assets/welcome-drinks.jpg.asset.json";
 import galaDinnerAsset from "@/assets/gala-dinner.jpg.asset.json";
-import dressCodeAsset from "@/assets/dress-code.png.asset.json";
+import dressCodeAsset from "@/assets/dress-code-guests.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,9 +41,10 @@ const TIMELINE = [
   {
     time: "14:00",
     title: "ჯვრისწერა",
-    note: "თბილისი, სიონის ტაძარი",
     image: sioniAsset.url,
     imageAlt: "თბილისის სიონის ტაძრის აკვარელური ილუსტრაცია",
+    mapUrl:
+      "https://www.google.com/maps/place/%E1%83%A1%E1%83%98%E1%83%9D%E1%83%9C%E1%83%98%E1%83%A1+%E1%83%A2%E1%83%90%E1%83%AB%E1%83%90%E1%83%A0%E1%83%98/@41.6913325,44.802684,650m/data=!3m1!1e3!4m10!1m2!2m1!1z4YOX4YOR4YOY4YOa4YOY4YOh4YOYIOGDoeGDmOGDneGDnOGDmOGDoSDhg6Lhg5Dhg6vhg5Dhg6Dhg5g!3m6!1s0x40440d0079a63b3f:0xd68818f2272b606d!8m2!3d41.6913325!4d44.8074476!15sCjvhg5fhg5Hhg5jhg5rhg5jhg6Hhg5gg4YOh4YOY4YOd4YOc4YOY4YOhIOGDouGDkOGDq-GDkOGDoOGDmJIBBmNodXJjaOABAA!16s%2Fg%2F11z5v57p68?entry=ttu&g_ep=EgoyMDI2MDkxNS4wIKXMDSoASAFQAw%3D%3D",
   },
   {
     time: "16:30",
@@ -355,39 +356,53 @@ function Index() {
 
         {/* Timeline */}
         <section className="border-t border-border px-6 py-24">
-          <div className="mx-auto flex max-w-xl flex-col items-center gap-12">
+          <div className="mx-auto flex max-w-3xl flex-col items-center gap-12">
             <SectionTitle>დღის განრიგი</SectionTitle>
-            <ul className="w-full">
-              {TIMELINE.map((t) => (
+            <ol className="relative w-full before:absolute before:bottom-8 before:left-[1.9rem] before:top-8 before:w-px before:bg-border sm:before:left-1/2">
+              {TIMELINE.map((t, index) => (
                 <li
                   key={t.time}
-                  className="grid grid-cols-[4rem_1fr] items-start gap-x-6 gap-y-5 border-b border-border py-8 last:border-0"
+                  className="relative grid grid-cols-[3.8rem_minmax(0,1fr)] gap-4 pb-12 last:pb-0 sm:grid-cols-[minmax(0,1fr)_5rem_minmax(0,1fr)] sm:gap-6"
                 >
-                  <span className="w-16 shrink-0 text-xs tracking-[0.2em] text-gold">
+                  <div className="relative z-10 flex h-[3.8rem] w-[3.8rem] shrink-0 items-center justify-center rounded-full border border-gold bg-background text-[0.65rem] tracking-[0.12em] text-gold sm:col-start-2 sm:row-start-1 sm:mx-auto">
                     {t.time}
-                  </span>
-                   <span>
-                    <span className="block font-display text-2xl text-foreground">
-                      {t.title}
-                   </span>
-                  {t.image ? (
+                  </div>
+
+                  <article
+                    className={`min-w-0 overflow-hidden border border-border bg-card shadow-sm sm:row-start-1 ${
+                      index % 2 === 0 ? "sm:col-start-1" : "sm:col-start-3"
+                    }`}
+                  >
+                    <div className="px-5 py-5 text-center">
+                      <h3 className="font-display text-2xl leading-snug text-foreground">
+                        {t.title}
+                      </h3>
+                    </div>
                     <img
                       src={t.image}
                       alt={t.imageAlt}
                       loading="lazy"
                       decoding="async"
-                      className="col-span-2 mt-1 aspect-[4/3] w-full object-cover sm:col-start-2 sm:aspect-[16/9]"
+                      className="block h-auto w-full object-contain"
                     />
-                  ) : null}
-                    {t.note ? (
-                      <span className="mt-1 block text-xs text-muted-foreground">
-                        {t.note}
-                      </span>
+                    {t.mapUrl ? (
+                      <div className="flex justify-center px-5 py-4">
+                        <Button
+                          asChild
+                          variant="ghost"
+                          className="h-10 rounded-none px-3 text-[0.62rem] uppercase tracking-[0.22em] text-muted-foreground"
+                        >
+                          <a href={t.mapUrl} target="_blank" rel="noopener noreferrer">
+                            <MapPin className="h-4 w-4" />
+                            იხილე რუკაზე
+                          </a>
+                        </Button>
+                      </div>
                     ) : null}
-                  </span>
+                  </article>
                 </li>
               ))}
-            </ul>
+            </ol>
           </div>
         </section>
 
@@ -406,7 +421,7 @@ function Index() {
               alt="კლასიკური და ელეგანტური საქორწილო სამოსის აკვარელური ილუსტრაცია"
               loading="lazy"
               decoding="async"
-              className="mt-2 h-auto w-full max-w-xs object-contain"
+              className="mt-2 h-auto w-full max-w-sm object-contain"
             />
           </div>
         </section>
