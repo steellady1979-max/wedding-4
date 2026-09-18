@@ -10,6 +10,9 @@ import { Pause, Play } from "lucide-react";
 import villaAsset from "@/assets/vila-mosavali.jpg.asset.json";
 import sioniAsset from "@/assets/sioni-cathedral.jpg.asset.json";
 import ceremonyAsset from "@/assets/outdoor-ceremony.jpg.asset.json";
+import welcomeDrinksAsset from "@/assets/welcome-drinks.jpg.asset.json";
+import galaDinnerAsset from "@/assets/gala-dinner.jpg.asset.json";
+import dressCodeAsset from "@/assets/dress-code.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -42,15 +45,24 @@ const TIMELINE = [
     image: sioniAsset.url,
     imageAlt: "თბილისის სიონის ტაძრის აკვარელური ილუსტრაცია",
   },
-  { time: "16:30", title: "სტუმრების დახვედრა", note: "Welcome Drink" },
+  {
+    time: "16:30",
+    title: "Welcome Drinks",
+    image: welcomeDrinksAsset.url,
+    imageAlt: "ვილა მოსავლის ტერასა და მისასალმებელი სასმელები",
+  },
   {
     time: "17:00",
     title: "ხელის მოწერის ცერემონია",
-    note: "ღია ცის ქვეშ",
     image: ceremonyAsset.url,
     imageAlt: "ღია ცის ქვეშ ხელის მოწერის ცერემონიის აკვარელური ილუსტრაცია",
   },
-  { time: "18:00", title: "გალა ვახშამი", note: "ვახშამი და სადღეგრძელოები" },
+  {
+    time: "18:00",
+    title: "გალა ვახშამი",
+    image: galaDinnerAsset.url,
+    imageAlt: "ელეგანტურად გაფორმებული საქორწილო სუფრა",
+  },
 ];
 
 function useCountdown(target: Date) {
@@ -367,9 +379,11 @@ function Index() {
                       className="col-span-2 mt-1 aspect-[4/3] w-full object-cover sm:col-start-2 sm:aspect-[16/9]"
                     />
                   ) : null}
-                    <span className="mt-1 block text-xs text-muted-foreground">
-                      {t.note}
-                    </span>
+                    {t.note ? (
+                      <span className="mt-1 block text-xs text-muted-foreground">
+                        {t.note}
+                      </span>
+                    ) : null}
                   </span>
                 </li>
               ))}
@@ -382,22 +396,18 @@ function Index() {
           <div className="mx-auto flex max-w-xl flex-col items-center gap-8 text-center">
             <SectionTitle>დრესკოდი</SectionTitle>
             <h2 className="font-display text-4xl text-foreground">
-              ჰაეროვანი ელეგანტურობა
+              კლასიკური ელეგანტურობა
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              კრემისფერი, ქვიშისფერი და პასტელური ტონები. მსუბუქი ქსოვილები,
-              დახვეწილი ხაზები. გთხოვთ, თავი შეიკავოთ თეთრი და მუქი ფერებისგან.
+              ძვირფასო სტუმრებო, გთხოვთ აირჩიოთ კლასიკური და ელეგანტური სამოსი
             </p>
-            <div className="flex gap-3 pt-2">
-              {["#FBF9F5", "#EFE7DA", "#E3D9CB", "#D9C8B4", "#C9BFAF"].map((c) => (
-                <span
-                  key={c}
-                  aria-hidden
-                  className="h-10 w-10 rounded-full border border-border"
-                  style={{ backgroundColor: c }}
-                />
-              ))}
-            </div>
+            <img
+              src={dressCodeAsset.url}
+              alt="კლასიკური და ელეგანტური საქორწილო სამოსის აკვარელური ილუსტრაცია"
+              loading="lazy"
+              decoding="async"
+              className="mt-2 h-auto w-full max-w-xs object-contain"
+            />
           </div>
         </section>
 
