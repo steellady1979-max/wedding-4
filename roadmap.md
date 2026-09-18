@@ -50,4 +50,4 @@
 
 - [x] Restore the attendance confirmation form and Google Sheet submission
 - [x] Keep the supplied champagne illustration inside the RSVP section
-- [ ] Verify the restored form and illustration on mobile and desktop
+- [x] Verify the restored form and illustration on mobile and desktop
