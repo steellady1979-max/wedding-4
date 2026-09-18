@@ -6,7 +6,15 @@ import { VideoIntro } from "@/components/wedding/VideoIntro";
 import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MapPin, Pause, Play } from "lucide-react";
+import {
+  Church,
+  HeartHandshake,
+  MapPin,
+  Pause,
+  Play,
+  UtensilsCrossed,
+  Wine,
+} from "lucide-react";
 import villaAsset from "@/assets/vila-mosavali.jpg.asset.json";
 import sioniAsset from "@/assets/sioni-cathedral.jpg.asset.json";
 import ceremonyAsset from "@/assets/outdoor-ceremony.jpg.asset.json";
@@ -41,6 +49,7 @@ const TIMELINE = [
   {
     time: "14:00",
     title: "ჯვრისწერა",
+    icon: Church,
     image: sioniAsset.url,
     imageAlt: "თბილისის სიონის ტაძრის აკვარელური ილუსტრაცია",
     mapUrl:
@@ -49,18 +58,21 @@ const TIMELINE = [
   {
     time: "16:30",
     title: "Welcome Drinks",
+    icon: Wine,
     image: welcomeDrinksAsset.url,
     imageAlt: "ვილა მოსავლის ტერასა და მისასალმებელი სასმელები",
   },
   {
     time: "17:00",
     title: "ხელის მოწერის ცერემონია",
+    icon: HeartHandshake,
     image: ceremonyAsset.url,
     imageAlt: "ღია ცის ქვეშ ხელის მოწერის ცერემონიის აკვარელური ილუსტრაცია",
   },
   {
     time: "18:00",
     title: "გალა ვახშამი",
+    icon: UtensilsCrossed,
     image: galaDinnerAsset.url,
     imageAlt: "ელეგანტურად გაფორმებული საქორწილო სუფრა",
   },
@@ -356,52 +368,54 @@ function Index() {
 
         {/* Timeline */}
         <section className="border-t border-border px-6 py-24">
-          <div className="mx-auto flex max-w-3xl flex-col items-center gap-12">
+          <div className="mx-auto flex max-w-2xl flex-col items-center gap-12">
             <SectionTitle>დღის განრიგი</SectionTitle>
-            <ol className="relative w-full before:absolute before:bottom-8 before:left-[1.9rem] before:top-8 before:w-px before:bg-border sm:before:left-1/2">
-              {TIMELINE.map((t, index) => (
-                <li
-                  key={t.time}
-                  className="relative grid grid-cols-[3.8rem_minmax(0,1fr)] gap-4 pb-12 last:pb-0 sm:grid-cols-[minmax(0,1fr)_5rem_minmax(0,1fr)] sm:gap-6"
-                >
-                  <div className="relative z-10 flex h-[3.8rem] w-[3.8rem] shrink-0 items-center justify-center rounded-full border border-gold bg-background text-[0.65rem] tracking-[0.12em] text-gold sm:col-start-2 sm:row-start-1 sm:mx-auto">
-                    {t.time}
-                  </div>
-
-                  <article
-                    className={`min-w-0 overflow-hidden border border-border bg-card shadow-sm sm:row-start-1 ${
-                      index % 2 === 0 ? "sm:col-start-1" : "sm:col-start-3"
-                    }`}
+            <ol className="relative w-full before:absolute before:bottom-8 before:left-5 before:top-8 before:w-px before:bg-border sm:before:left-7">
+              {TIMELINE.map((t) => {
+                const Icon = t.icon;
+                return (
+                  <li
+                    key={t.time}
+                    className="relative grid grid-cols-[2.5rem_minmax(0,1fr)] gap-5 pb-16 last:pb-0 sm:grid-cols-[3.5rem_minmax(0,1fr)] sm:gap-7"
                   >
-                    <div className="px-5 py-5 text-center">
-                      <h3 className="font-display text-2xl leading-snug text-foreground">
+                    <div className="relative z-10 flex h-10 w-10 items-center justify-center bg-background sm:h-14 sm:w-14">
+                      <Icon
+                        aria-hidden="true"
+                        strokeWidth={1}
+                        className="h-6 w-6 text-gold sm:h-7 sm:w-7"
+                      />
+                    </div>
+
+                    <article className="min-w-0 pt-0.5 sm:pt-1">
+                      <time className="text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
+                        {t.time}
+                      </time>
+                      <h3 className="mt-1 font-display text-2xl leading-snug text-foreground sm:text-3xl">
                         {t.title}
                       </h3>
-                    </div>
-                    <img
-                      src={t.image}
-                      alt={t.imageAlt}
-                      loading="lazy"
-                      decoding="async"
-                      className="block h-auto w-full object-contain"
-                    />
-                    {t.mapUrl ? (
-                      <div className="flex justify-center px-5 py-4">
+                      <img
+                        src={t.image}
+                        alt={t.imageAlt}
+                        loading="lazy"
+                        decoding="async"
+                        className="mt-5 block h-auto w-full rounded-sm object-contain"
+                      />
+                      {t.mapUrl ? (
                         <Button
                           asChild
                           variant="ghost"
-                          className="h-10 rounded-none px-3 text-[0.62rem] uppercase tracking-[0.22em] text-muted-foreground"
+                          className="mt-3 h-10 rounded-none px-0 text-[0.62rem] uppercase tracking-[0.22em] text-muted-foreground"
                         >
                           <a href={t.mapUrl} target="_blank" rel="noopener noreferrer">
                             <MapPin className="h-4 w-4" />
                             იხილე რუკაზე
                           </a>
                         </Button>
-                      </div>
-                    ) : null}
-                  </article>
-                </li>
-              ))}
+                      ) : null}
+                    </article>
+                  </li>
+                );
+              })}
             </ol>
           </div>
         </section>

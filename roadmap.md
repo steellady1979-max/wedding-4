@@ -32,3 +32,9 @@
 - [x] Redesign the schedule and preserve each image’s natural aspect ratio
 - [x] Replace the Sioni address with a direct map button
 - [x] Verify the updated schedule on mobile and desktop
+
+## Minimal icon schedule
+
+- [x] Replace prominent time circles with event-specific line icons
+- [x] Restyle the schedule as an airy editorial timeline with natural-size images
+- [x] Verify the refined schedule on mobile and desktop
