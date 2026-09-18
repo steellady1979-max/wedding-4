@@ -219,7 +219,7 @@ function MusicPlayer({ started }: { started: boolean }) {
   const sendCommand = (command: "playVideo" | "pauseVideo") => {
     iframeRef.current?.contentWindow?.postMessage(
       JSON.stringify({ event: "command", func: command, args: [] }),
-      "https://www.youtube.com",
+      "https://www.youtube-nocookie.com",
     );
   };
 
@@ -261,6 +261,12 @@ function Index() {
       document.body.style.overflow = "";
     };
   }, [introDone]);
+
+  useEffect(() => {
+    const startMusic = () => setMusicStarted(true);
+    document.addEventListener("pointerdown", startMusic, { once: true });
+    return () => document.removeEventListener("pointerdown", startMusic);
+  }, []);
 
   return (
     <>

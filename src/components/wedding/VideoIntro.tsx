@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import videoAsset from "@/assets/wedding-levani-tamta-intro.mp4.asset.json";
 
 const PETALS = [
@@ -74,7 +74,7 @@ export function VideoIntro({
               width: petal.size,
               height: `calc(${petal.size} * 1.35)`,
               "--petal-drift": `${index % 2 === 0 ? 1 : -1}8vw`,
-            } as React.CSSProperties}
+            } as CSSProperties}
           />
         ))}
       </div>

@@ -17,4 +17,4 @@
 - [x] Replace night mode and stars with gently falling rose petals on the intro
 - [x] Start the supplied YouTube music after the guest's first touch and add playback control
 - [x] Embed Villa Mosavali's map in the location section
-- [ ] Verify mobile and desktop views, music interaction, intro transition, and embedded map
+- [x] Verify mobile and desktop views, music interaction, intro transition, and embedded map
