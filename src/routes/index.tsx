@@ -79,7 +79,7 @@ const TIMELINE: TimelineItem[] = [
     image: waltzStillAsset.url,
     imageAlt: "ლევანისა და თამთას საქორწილო ვალსი",
     imageClassName:
-      "mx-auto block h-auto max-h-[30rem] w-auto rounded-sm object-contain",
+      "mx-auto block h-auto max-h-[16rem] w-auto max-w-[62%] rounded-sm object-contain sm:max-h-[20rem] sm:max-w-[13rem]",
   },
   {
     time: "17:00",
