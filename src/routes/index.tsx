@@ -10,6 +10,7 @@ import {
   ChevronDown,
   Church,
   HeartHandshake,
+  type LucideIcon,
   MapPin,
   Pause,
   Play,
@@ -19,7 +20,7 @@ import {
 import villaAsset from "@/assets/vila-mosavali.jpg.asset.json";
 import sioniAsset from "@/assets/sioni-cathedral.jpg.asset.json";
 import ceremonyAsset from "@/assets/outdoor-ceremony.jpg.asset.json";
-import welcomeDrinksAsset from "@/assets/welcome-drinks.jpg.asset.json";
+import waltzStillAsset from "@/assets/waltz-still.jpg.asset.json";
 import galaDinnerAsset from "@/assets/gala-dinner.jpg.asset.json";
 import dressCodeAsset from "@/assets/dress-code-guests.png.asset.json";
 import champagneTowerAsset from "@/assets/champagne-tower.png.asset.json";
@@ -51,7 +52,17 @@ export const Route = createFileRoute("/")({
 
 const WEDDING_DATE = new Date("2026-10-18T14:00:00+04:00");
 
-const TIMELINE = [
+type TimelineItem = {
+  time: string;
+  title: string;
+  icon: LucideIcon;
+  image: string;
+  imageAlt: string;
+  mapUrl?: string;
+  imageClassName?: string;
+};
+
+const TIMELINE: TimelineItem[] = [
   {
     time: "14:00",
     title: "ჯვრისწერა",
@@ -65,8 +76,10 @@ const TIMELINE = [
     time: "16:30",
     title: "სტუმრების მიღება",
     icon: Wine,
-    image: welcomeDrinksAsset.url,
-    imageAlt: "ვილა მოსავლის ტერასა და მისასალმებელი სასმელები",
+    image: waltzStillAsset.url,
+    imageAlt: "ლევანისა და თამთას საქორწილო ვალსი",
+    imageClassName:
+      "mx-auto block h-auto max-h-[30rem] w-auto rounded-sm object-contain",
   },
   {
     time: "17:00",
@@ -179,7 +192,10 @@ function Itinerary() {
                     alt={item.imageAlt}
                     loading="lazy"
                     decoding="async"
-                    className="block h-auto w-full rounded-sm object-contain"
+                    className={
+                      item.imageClassName ??
+                      "block h-auto w-full rounded-sm object-contain"
+                    }
                   />
                   {item.mapUrl ? (
                     <Button
