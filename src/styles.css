@@ -157,6 +157,9 @@
   --color-gold: var(--gold);
   --color-sand: var(--sand);
   --color-olive: var(--olive);
+  --color-night: var(--night);
+  --color-starlight: var(--starlight);
+  --color-night-muted: var(--night-muted);
 }
 
 :root {
@@ -181,6 +184,9 @@
   --gold: oklch(0.68 0.058 78);
   --sand: oklch(0.9 0.02 82);
   --olive: oklch(0.42 0.055 115);
+  --night: oklch(0.16 0.025 265);
+  --starlight: oklch(0.94 0.035 88);
+  --night-muted: oklch(0.76 0.025 88);
 }
 
 @layer base {
@@ -301,6 +307,72 @@
   overflow: hidden;
 }
 
+.wish-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wish-star {
+  position: absolute;
+  width: 0.2rem;
+  height: 0.2rem;
+  border-radius: 999px;
+  background: var(--starlight);
+  box-shadow: 0 0 0.45rem var(--starlight);
+  opacity: 0.3;
+  animation: wish-star-twinkle 3.8s ease-in-out infinite;
+}
+
+.wish-star:nth-child(5n + 1) { left: 8%; top: 14%; animation-delay: -0.8s; }
+.wish-star:nth-child(5n + 2) { left: 27%; top: 31%; animation-delay: -2.2s; }
+.wish-star:nth-child(5n + 3) { left: 52%; top: 12%; animation-delay: -1.4s; }
+.wish-star:nth-child(5n + 4) { left: 73%; top: 38%; animation-delay: -3s; }
+.wish-star:nth-child(5n) { left: 91%; top: 19%; animation-delay: -0.3s; }
+.wish-star:nth-child(6n + 1) { transform: translateY(22rem); }
+.wish-star:nth-child(7n + 2) { transform: translateY(34rem); }
+.wish-star:nth-child(8n + 3) { transform: translateY(46rem); }
+
+.wish-star-new {
+  left: 50%;
+  top: 28%;
+  width: 0.7rem;
+  height: 0.7rem;
+  opacity: 1;
+  box-shadow: 0 0 0.8rem var(--starlight), 0 0 2.4rem var(--starlight);
+  animation: wish-star-ignite 1.5s cubic-bezier(0.22, 1, 0.36, 1) both,
+    wish-star-pulse 3s ease-in-out 1.5s infinite;
+}
+
+.wish-star-new::before,
+.wish-star-new::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 3rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--starlight), transparent);
+  transform: translate(-50%, -50%);
+}
+
+.wish-star-new::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+@keyframes wish-star-twinkle {
+  0%, 100% { opacity: 0.2; scale: 0.7; }
+  50% { opacity: 0.85; scale: 1.25; }
+}
+
+@keyframes wish-star-ignite {
+  0% { opacity: 0; scale: 0.1; }
+  55% { opacity: 1; scale: 1.8; }
+  100% { opacity: 1; scale: 1; }
+}
+
+@keyframes wish-star-pulse {
+  0%, 100% { scale: 1; }
+  50% { scale: 1.18; }
+}
+
 @utility animate-fade-in {
   animation: w-fade-in 1.2s ease-out both;
 }
@@ -357,4 +429,7 @@
   .reveal-dance { opacity: 1; transform: none; transition: none; }
 
   .itinerary-panel { transition: none; }
+
+  .wish-star { animation: none; }
+  .wish-star-new { opacity: 1; scale: 1; }
 }

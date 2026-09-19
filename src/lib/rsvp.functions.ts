@@ -8,6 +8,7 @@ const GATEWAY_BASE = "https://connector-gateway.lovable.dev/google_sheets/v4";
 const rsvpInput = z.object({
   name: z.string().trim().min(2, "სახელი აუცილებელია").max(80),
   attending: z.enum(["yes", "no"]),
+  wish: z.string().trim().min(2, "სურვილი აუცილებელია").max(500),
   // Honeypot: real guests never see or fill this in, spam bots do.
   company: z.string().max(0).optional(),
 });
@@ -30,11 +31,12 @@ export const submitRsvp = createServerFn({ method: "POST" })
       new Date().toISOString(),
       data.name,
       data.attending === "yes" ? "დავესწრები" : "ვერ დავესწრები",
+      data.wish,
     ];
 
     // encodeURI keeps "!" and ":" intact (the API rejects an encoded colon)
     // while safely escaping the Georgian sheet name.
-    const range = encodeURI(`${SHEET_TAB}!A:C`);
+    const range = encodeURI(`${SHEET_TAB}!A:D`);
     const url =
       `${GATEWAY_BASE}/spreadsheets/${SPREADSHEET_ID}/values/${range}` +
       `:append?valueInputOption=USER_ENTERED`;
