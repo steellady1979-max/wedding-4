@@ -81,3 +81,8 @@
 - [x] Rename the 17:00 event to ხელმოწერის ცერემონია
 - [x] Replace the background music with the supplied YouTube track
 - [x] Verify the new video placement and music control on mobile
+
+## Vercel compatibility
+- [x] Make uploaded photos, videos, and the custom font load outside Lovable
+- [x] Verify the production build and rendered media
+- [ ] Deploy to Vercel — blocked because this workspace has no Vercel connection

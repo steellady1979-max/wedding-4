@@ -513,7 +513,7 @@ function MusicPlayer({ started }: { started: boolean }) {
 
 function Index() {
   const [introDone, setIntroDone] = useState(false);
-  const [musicStarted, setMusicStarted] = useState(false);
+  const [musicStarted, setMusicStarted] = useState(true);
 
   useEffect(() => {
     document.body.style.overflow = introDone ? "" : "hidden";
