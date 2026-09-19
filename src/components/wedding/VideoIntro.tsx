@@ -87,9 +87,9 @@ export function VideoIntro({
       <button
         type="button"
         onClick={finish}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 border border-white/65 bg-primary/90 px-9 py-3 font-display text-lg tracking-[0.12em] text-primary-foreground shadow-lg backdrop-blur-sm transition-colors hover:bg-primary sm:bottom-12"
+        className="absolute bottom-10 left-1/2 w-max max-w-[calc(100%_-_2rem)] -translate-x-1/2 border border-white/65 bg-primary/90 px-6 py-3 font-display text-base tracking-[0.08em] text-primary-foreground shadow-lg backdrop-blur-sm transition-colors hover:bg-primary sm:bottom-12 sm:px-9 sm:text-lg sm:tracking-[0.12em]"
       >
-        გახსენი
+        გთხოვთ, გახსენით და ჩამოსქროლეთ
       </button>
     </div>
   );

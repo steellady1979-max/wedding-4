@@ -642,10 +642,27 @@ function Index() {
             </div>
             <Countdown onHero />
           </div>
+
+          <button
+            type="button"
+            onClick={() =>
+              document
+                .getElementById("invitation-details")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="absolute bottom-5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1.5 text-white/80 transition-colors hover:text-white sm:bottom-8"
+            aria-label="ჩამოსქროლეთ მოსაწვევის სანახავად"
+          >
+            <span className="text-[0.58rem] uppercase tracking-[0.32em]">ჩამოსქროლეთ</span>
+            <ChevronDown aria-hidden="true" className="h-5 w-5 animate-bounce" strokeWidth={1.25} />
+          </button>
         </section>
 
         {/* Wedding envelope */}
-        <section className="relative z-10 border-t border-border px-6 py-16 sm:py-20">
+        <section
+          id="invitation-details"
+          className="relative z-10 scroll-mt-4 border-t border-border px-6 py-16 sm:py-20"
+        >
           <div className="mx-auto max-w-sm overflow-hidden rounded-sm">
             <LazyLoopingVideo
               src={envelopeVideoAsset.url}
