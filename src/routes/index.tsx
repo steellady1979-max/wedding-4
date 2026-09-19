@@ -57,6 +57,9 @@ export const Route = createFileRoute("/")({
 });
 
 const WEDDING_DATE = new Date("2026-10-18T14:00:00+04:00");
+const SIONI_MAP_URL =
+  "https://www.google.com/maps/place/%E1%83%A1%E1%83%98%E1%83%9D%E1%83%9C%E1%83%98%E1%83%A1+%E1%83%A2%E1%83%90%E1%83%AB%E1%83%90%E1%83%A0%E1%83%98/@41.6913325,44.802684,650m/data=!3m1!1e3!4m10!1m2!2m1!1z4YOX4YOR4YOY4YOa4YOY4YOh4YOYIOGDoeGDmOGDneGDnOGDmOGDoSDhg6Lhg5Dhg6vhg5Dhg6Dhg5g!3m6!1s0x40440d0079a63b3f:0xd68818f2272b606d!8m2!3d41.6913325!4d44.8074476!15sCjvhg5fhg5Hhg5jhg5rhg5jhg6Hhg5gg4YOh4YOY4YOd4YOc4YOY4YOhIOGDouGDkOGDq-GDkOGDoOGDmJIBBmNodXJjaOABAA!16s%2Fg%2F11z5v57p68?entry=ttu&g_ep=EgoyMDI2MDkxNS4wIKXMDSoASAFQAw%3D%3D";
+const VILLA_MAP_URL = "https://maps.app.goo.gl/evaofQxhjzTiQbQw8?g_st=ic";
 
 type TimelineItem = {
   time: string;
@@ -75,8 +78,7 @@ const TIMELINE: TimelineItem[] = [
     icon: Church,
     image: sioniAsset.url,
     imageAlt: "თბილისის სიონის ტაძრის აკვარელური ილუსტრაცია",
-    mapUrl:
-      "https://www.google.com/maps/place/%E1%83%A1%E1%83%98%E1%83%9D%E1%83%9C%E1%83%98%E1%83%A1+%E1%83%A2%E1%83%90%E1%83%AB%E1%83%90%E1%83%A0%E1%83%98/@41.6913325,44.802684,650m/data=!3m1!1e3!4m10!1m2!2m1!1z4YOX4YOR4YOY4YOa4YOY4YOh4YOYIOGDoeGDmOGDneGDnOGDmOGDoSDhg6Lhg5Dhg6vhg5Dhg6Dhg5g!3m6!1s0x40440d0079a63b3f:0xd68818f2272b606d!8m2!3d41.6913325!4d44.8074476!15sCjvhg5fhg5Hhg5jhg5rhg5jhg6Hhg5gg4YOh4YOY4YOd4YOc4YOY4YOhIOGDouGDkOGDq-GDkOGDoOGDmJIBBmNodXJjaOABAA!16s%2Fg%2F11z5v57p68?entry=ttu&g_ep=EgoyMDI2MDkxNS4wIKXMDSoASAFQAw%3D%3D",
+    mapUrl: SIONI_MAP_URL,
   },
   {
     time: "16:30",
@@ -672,19 +674,28 @@ function Index() {
                 className="h-full w-full border-0"
               />
             </div>
-            <Button
-              asChild
-              variant="outline"
-              className="h-12 rounded-none border-primary bg-primary px-8 text-[0.65rem] uppercase tracking-[0.35em] text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
-            >
-              <a
-                 href="https://maps.app.goo.gl/evaofQxhjzTiQbQw8?g_st=ic"
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="grid w-full max-w-xl gap-3 sm:grid-cols-2">
+              <Button
+                asChild
+                variant="outline"
+                className="h-12 rounded-none border-primary bg-primary px-5 text-[0.62rem] uppercase tracking-[0.22em] text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
               >
-                რუკაზე ნახვა
-              </a>
-            </Button>
+                <a href={VILLA_MAP_URL} target="_blank" rel="noopener noreferrer">
+                  <MapPin className="h-4 w-4" />
+                  ვილა მოსავალი რუკაზე
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="h-12 rounded-none border-primary/60 bg-transparent px-5 text-[0.62rem] uppercase tracking-[0.22em] text-primary hover:bg-primary/10 hover:text-primary"
+              >
+                <a href={SIONI_MAP_URL} target="_blank" rel="noopener noreferrer">
+                  <Church className="h-4 w-4" />
+                  სიონის ტაძარი რუკაზე
+                </a>
+              </Button>
+            </div>
           </div>
         </section>
 
