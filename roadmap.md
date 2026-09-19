@@ -60,3 +60,6 @@
 - [x] Restyle buttons and footer in olive green
 - [x] Add the supplied monogram before the footer names
 - [x] Verify mobile and desktop layout and interactions
+
+## Footer seal update
+- [x] Footer monogram replaced with the gold floral seal, normal size, clean blend on olive
