@@ -8,40 +8,29 @@ const GATEWAY_BASE = "https://connector-gateway.lovable.dev/google_sheets/v4";
 const rsvpInput = z.object({
   name: z.string().trim().min(2, "სახელი აუცილებელია").max(80),
   attending: z.enum(["yes", "no"]),
-  wish: z.string().trim().min(2, "სურვილი აუცილებელია").max(500),
   // Honeypot: real guests never see or fill this in, spam bots do.
   company: z.string().max(0).optional(),
 });
 
-export const submitRsvp = createServerFn({ method: "POST" })
-  .inputValidator((data) => rsvpInput.parse(data))
-  .handler(async ({ data }) => {
-    const apiKey = process.env["LOVABLE_API_KEY"];
-    const connectionKey = process.env["GOOGLE_SHEETS_API_KEY"];
+const wishInput = z.object({
+  name: z.string().trim().min(2, "სახელი აუცილებელია").max(80),
+  wish: z.string().trim().min(2, "სურვილი აუცილებელია").max(500),
+  company: z.string().max(0).optional(),
+});
 
-    if (!apiKey || !connectionKey) {
-      console.error("RSVP save skipped: Google Sheets connection is not configured");
-      throw new Error("პასუხის შენახვა დროებით ვერ ხერხდება");
-    }
+async function appendRow(row: string[]) {
+  const apiKey = process.env["LOVABLE_API_KEY"];
+  const connectionKey = process.env["GOOGLE_SHEETS_API_KEY"];
 
-    // A filled honeypot means a bot — pretend success, write nothing.
-    if (data.company) return { saved: false } as const;
+  if (!apiKey || !connectionKey) {
+    console.error("Google Sheets connection is not configured");
+    throw new Error("პასუხის შენახვა დროებით ვერ ხერხდება");
+  }
 
-    const row = [
-      new Date().toISOString(),
-      data.name,
-      data.attending === "yes" ? "დავესწრები" : "ვერ დავესწრები",
-      data.wish,
-    ];
-
-    // encodeURI keeps "!" and ":" intact (the API rejects an encoded colon)
-    // while safely escaping the Georgian sheet name.
-    const range = encodeURI(`${SHEET_TAB}!A:D`);
-    const url =
-      `${GATEWAY_BASE}/spreadsheets/${SPREADSHEET_ID}/values/${range}` +
-      `:append?valueInputOption=USER_ENTERED`;
-
-    const response = await fetch(url, {
+  const range = encodeURI(`${SHEET_TAB}!A:D`);
+  const response = await fetch(
+    `${GATEWAY_BASE}/spreadsheets/${SPREADSHEET_ID}/values/${range}:append?valueInputOption=USER_ENTERED`,
+    {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -49,13 +38,33 @@ export const submitRsvp = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ values: [row] }),
-    });
+    },
+  );
 
-    if (!response.ok) {
-      const body = await response.text();
-      console.error(`RSVP append failed [${response.status}]: ${body}`);
-      throw new Error("პასუხის შენახვა დროებით ვერ ხერხდება");
-    }
+  if (!response.ok) {
+    const body = await response.text();
+    console.error(`Google Sheets append failed [${response.status}]: ${body}`);
+    throw new Error("პასუხის შენახვა დროებით ვერ ხერხდება");
+  }
+}
 
+export const submitRsvp = createServerFn({ method: "POST" })
+  .inputValidator((data) => rsvpInput.parse(data))
+  .handler(async ({ data }) => {
+    if (data.company) return { saved: false } as const;
+    await appendRow([
+      new Date().toISOString(),
+      data.name,
+      data.attending === "yes" ? "დავესწრები" : "ვერ დავესწრები",
+      "",
+    ]);
+    return { saved: true } as const;
+  });
+
+export const submitWish = createServerFn({ method: "POST" })
+  .inputValidator((data) => wishInput.parse(data))
+  .handler(async ({ data }) => {
+    if (data.company) return { saved: false } as const;
+    await appendRow([new Date().toISOString(), data.name, "", data.wish]);
     return { saved: true } as const;
   });

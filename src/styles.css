@@ -357,6 +357,19 @@
 
 .wish-star-new::after { transform: translate(-50%, -50%) rotate(90deg); }
 
+.wish-heart {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  color: var(--starlight);
+  font-family: serif;
+  font-size: 2.8rem;
+  line-height: 1;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+  animation: wish-heart-rise 2.2s 0.45s ease-out both;
+}
+
 @keyframes wish-star-twinkle {
   0%, 100% { opacity: 0.2; scale: 0.7; }
   50% { opacity: 0.85; scale: 1.25; }
@@ -371,6 +384,12 @@
 @keyframes wish-star-pulse {
   0%, 100% { scale: 1; }
   50% { scale: 1.18; }
+}
+
+@keyframes wish-heart-rise {
+  0% { opacity: 0; transform: translate(-50%, 0.5rem) scale(0.2); }
+  35% { opacity: 0.9; transform: translate(-50%, -2.5rem) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -6rem) scale(0.65); }
 }
 
 @utility animate-fade-in {
@@ -432,4 +451,5 @@
 
   .wish-star { animation: none; }
   .wish-star-new { opacity: 1; scale: 1; }
+  .wish-heart { display: none; }
 }
