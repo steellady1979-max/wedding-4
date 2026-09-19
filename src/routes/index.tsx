@@ -1,7 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
 import { submitRsvp, submitWish } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
@@ -467,23 +474,24 @@ function WaltzVideo() {
 
 function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const hasStartedRef = useRef(false);
   const [playing, setPlaying] = useState(false);
 
-  const play = () => {
+  const play = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    if (!hasStartedRef.current) {
+      audio.currentTime = 13;
+      hasStartedRef.current = true;
+    }
     void audio.play().catch(() => setPlaying(false));
-  };
+  }, []);
 
   useEffect(() => {
-    const startMusic = () => {
-      const audio = audioRef.current;
-      if (!audio) return;
-      void audio.play().catch(() => setPlaying(false));
-    };
+    const startMusic = () => play();
     document.addEventListener("pointerdown", startMusic, { once: true });
     return () => document.removeEventListener("pointerdown", startMusic);
-  }, []);
+  }, [play]);
 
   return (
     <>
@@ -491,7 +499,12 @@ function MusicPlayer() {
         ref={audioRef}
         src="/music/when-i-fall-in-love.mp3"
         loop
-        preload="none"
+        preload="metadata"
+        onLoadedMetadata={() => {
+          if (!hasStartedRef.current && audioRef.current) {
+            audioRef.current.currentTime = 13;
+          }
+        }}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
       />

@@ -92,9 +92,9 @@ export function VideoIntro({
       <button
         type="button"
         onClick={finish}
-        className="absolute right-5 top-5 border border-white/50 bg-black/25 px-4 py-2 text-[0.6rem] uppercase tracking-[0.25em] text-white"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 border border-white/65 bg-primary/90 px-9 py-3 font-display text-lg tracking-[0.12em] text-primary-foreground shadow-lg backdrop-blur-sm transition-colors hover:bg-primary sm:bottom-12"
       >
-        გამოტოვება
+        გახსენი
       </button>
     </div>
   );
