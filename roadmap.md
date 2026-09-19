@@ -69,3 +69,9 @@
 - [x] Save RSVP wishes to the existing Google Sheet
 - [x] Ignite a new star after successful submission
 - [x] Verify mobile and desktop layout, submission, and animation
+
+## Separate RSVP and wishes
+- [ ] Restore RSVP as its own independent section
+- [ ] Add a separate wish-only form available to every guest
+- [ ] Save wishes independently and animate a newly lit star
+- [ ] Verify both flows on mobile and desktop
