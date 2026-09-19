@@ -25,6 +25,7 @@ import dressCodeAsset from "@/assets/dress-code-guests.png.asset.json";
 import champagneTowerAsset from "@/assets/champagne-tower.png.asset.json";
 import petalFieldAsset from "@/assets/rose-petal-field.png.asset.json";
 import envelopeVideoAsset from "@/assets/wedding-envelope.mp4.asset.json";
+import magicalWaltzAsset from "@/assets/magical-waltz.mp4.asset.json";
 import coupleSealAsset from "@/assets/couple-seal.png.asset.json";
 
 export const Route = createFileRoute("/")({
@@ -69,7 +70,7 @@ const TIMELINE = [
   },
   {
     time: "17:00",
-    title: "ხელის მოწერის ცერემონია",
+    title: "ხელმოწერის ცერემონია",
     icon: HeartHandshake,
     image: ceremonyAsset.url,
     imageAlt: "ღია ცის ქვეშ ხელის მოწერის ცერემონიის აკვარელური ილუსტრაცია",
@@ -432,6 +433,25 @@ function WishSky() {
   );
 }
 
+function WaltzVideo() {
+  return (
+    <section className="relative z-10 border-t border-border bg-background px-4 py-14 sm:px-6 sm:py-20">
+      <div className="mx-auto w-full max-w-sm overflow-hidden rounded-sm">
+        <video
+          src={magicalWaltzAsset.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label="ჯადოსნური საქორწილო ვალსი"
+          className="block aspect-[9/16] h-auto w-full object-contain"
+        />
+      </div>
+    </section>
+  );
+}
+
 function MusicPlayer({ started }: { started: boolean }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [playing, setPlaying] = useState(started);
@@ -452,7 +472,7 @@ function MusicPlayer({ started }: { started: boolean }) {
       <iframe
         ref={iframeRef}
         title="საქორწილო მუსიკა"
-        src="https://www.youtube-nocookie.com/embed/J123lM0RvzM?autoplay=1&loop=1&playlist=J123lM0RvzM&enablejsapi=1&controls=0&playsinline=1"
+        src="https://www.youtube-nocookie.com/embed/GfAb0gNPy6s?autoplay=1&loop=1&playlist=GfAb0gNPy6s&enablejsapi=1&controls=0&playsinline=1"
         allow="autoplay; encrypted-media"
         className="pointer-events-none fixed h-px w-px opacity-0"
       />
@@ -612,6 +632,7 @@ function Index() {
         </section>
 
         <RsvpSection />
+        <WaltzVideo />
         <WishSky />
 
         <footer className="relative z-10 border-t border-primary/30 bg-primary px-6 py-12 text-center text-primary-foreground">
