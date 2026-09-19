@@ -63,3 +63,9 @@
 
 ## Footer seal update
 - [x] Footer monogram replaced with the gold floral seal, normal size, clean blend on olive
+
+## Wish on the sky
+- [ ] Add the night-sky wish section directly after dress code
+- [ ] Save RSVP wishes to the existing Google Sheet
+- [ ] Ignite a new star after successful submission
+- [ ] Verify mobile and desktop layout, submission, and animation
