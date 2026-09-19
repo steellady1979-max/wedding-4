@@ -62,7 +62,7 @@ const TIMELINE = [
   },
   {
     time: "16:30",
-    title: "Welcome Drinks",
+    title: "სტუმრების მიღება",
     icon: Wine,
     image: welcomeDrinksAsset.url,
     imageAlt: "ვილა მოსავლის ტერასა და მისასალმებელი სასმელები",
@@ -562,7 +562,7 @@ function Index() {
             alt="ლევანისა და თამთას მონოგრამა"
             loading="lazy"
             decoding="async"
-            className="mx-auto mb-4 h-16 w-16 object-contain"
+            className="mx-auto mb-5 h-28 w-28 object-contain"
           />
           <p className="font-display text-2xl text-primary-foreground">ლევანი &amp; თამთა</p>
           <p className="mt-2 text-[0.6rem] uppercase tracking-[0.4em] text-primary-foreground/70">
