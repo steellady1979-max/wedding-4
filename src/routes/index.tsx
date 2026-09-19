@@ -52,7 +52,17 @@ export const Route = createFileRoute("/")({
 
 const WEDDING_DATE = new Date("2026-10-18T14:00:00+04:00");
 
-const TIMELINE = [
+type TimelineItem = {
+  time: string;
+  title: string;
+  icon: LucideIcon;
+  image: string;
+  imageAlt: string;
+  mapUrl?: string;
+  imageClassName?: string;
+};
+
+const TIMELINE: TimelineItem[] = [
   {
     time: "14:00",
     title: "ჯვრისწერა",
