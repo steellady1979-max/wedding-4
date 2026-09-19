@@ -80,4 +80,4 @@
 - [x] Add the supplied vertical video between RSVP and wishes
 - [x] Rename the 17:00 event to ხელმოწერის ცერემონია
 - [x] Replace the background music with the supplied YouTube track
-- [ ] Verify the new video placement and music control on mobile
+- [x] Verify the new video placement and music control on mobile
