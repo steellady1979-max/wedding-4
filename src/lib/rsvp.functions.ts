@@ -1,9 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const SPREADSHEET_ID = "1eg0svt0-gNpwbq9WkNjdIU2PNK6JRO8Tzd8M1DYsVCs";
-const SHEET_TAB = "1ფურცელი";
-const GATEWAY_BASE = "https://connector-gateway.lovable.dev/google_sheets/v4";
+const GOOGLE_SHEETS_WEBHOOK_URL =
+  "https://script.google.com/macros/s/AKfycbycH6idL5QqdW_cXJX7rZzPz1yaZbsggjPW0clx36FVisoeX5XwknsRy7T0mPMAG2arhg/exec";
 
 const rsvpInput = z.object({
   name: z.string().trim().min(2, "სახელი აუცილებელია").max(80),
@@ -18,53 +17,64 @@ const wishInput = z.object({
   company: z.string().max(0).optional(),
 });
 
-async function appendRow(row: string[]) {
-  const apiKey = process.env["LOVABLE_API_KEY"];
-  const connectionKey = process.env["GOOGLE_SHEETS_API_KEY"];
+type SheetSubmission =
+  | { type: "rsvp"; name: string; attending: "yes" | "no" }
+  | { type: "wish"; name: string; wish: string };
 
-  if (!apiKey || !connectionKey) {
+async function submitToSheet(submission: SheetSubmission) {
+  const secret = process.env["GOOGLE_SHEETS_WEBHOOK_SECRET"];
+
+  if (!secret) {
     console.error("Google Sheets connection is not configured");
     throw new Error("პასუხის შენახვა დროებით ვერ ხერხდება");
   }
 
-  const range = encodeURI(`${SHEET_TAB}!A:D`);
-  const response = await fetch(
-    `${GATEWAY_BASE}/spreadsheets/${SPREADSHEET_ID}/values/${range}:append?valueInputOption=USER_ENTERED`,
-    {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
+  try {
+    const response = await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
       method: "POST",
+      redirect: "follow",
+      signal: controller.signal,
       headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "X-Connection-Api-Key": connectionKey,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ values: [row] }),
-    },
-  );
+      body: JSON.stringify({ ...submission, secret }),
+    });
 
-  if (!response.ok) {
-    const body = await response.text();
-    console.error(`Google Sheets append failed [${response.status}]: ${body}`);
-    throw new Error("პასუხის შენახვა დროებით ვერ ხერხდება");
+    const result = (await response.json().catch(() => null)) as {
+      ok?: boolean;
+      error?: string;
+    } | null;
+
+    if (!response.ok || result?.ok !== true) {
+      console.error(
+        `Google Sheets webhook failed [${response.status}]: ${result?.error ?? "invalid response"}`,
+      );
+      throw new Error("პასუხის შენახვა დროებით ვერ ხერხდება");
+    }
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
 export const submitRsvp = createServerFn({ method: "POST" })
-  .inputValidator((data) => rsvpInput.parse(data))
+  .validator((data) => rsvpInput.parse(data))
   .handler(async ({ data }) => {
     if (data.company) return { saved: false } as const;
-    await appendRow([
-      new Date().toISOString(),
-      data.name,
-      data.attending === "yes" ? "დავესწრები" : "ვერ დავესწრები",
-      "",
-    ]);
+    await submitToSheet({
+      type: "rsvp",
+      name: data.name,
+      attending: data.attending,
+    });
     return { saved: true } as const;
   });
 
 export const submitWish = createServerFn({ method: "POST" })
-  .inputValidator((data) => wishInput.parse(data))
+  .validator((data) => wishInput.parse(data))
   .handler(async ({ data }) => {
     if (data.company) return { saved: false } as const;
-    await appendRow([new Date().toISOString(), data.name, "", data.wish]);
+    await submitToSheet({ type: "wish", name: data.name, wish: data.wish });
     return { saved: true } as const;
   });
