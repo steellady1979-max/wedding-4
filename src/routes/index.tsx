@@ -76,8 +76,10 @@ const TIMELINE: TimelineItem[] = [
     time: "16:30",
     title: "სტუმრების მიღება",
     icon: Wine,
-    image: welcomeDrinksAsset.url,
-    imageAlt: "ვილა მოსავლის ტერასა და მისასალმებელი სასმელები",
+    image: waltzStillAsset.url,
+    imageAlt: "ლევანისა და თამთას საქორწილო ვალსი",
+    imageClassName:
+      "mx-auto block h-auto max-h-[30rem] w-auto rounded-sm object-contain",
   },
   {
     time: "17:00",
@@ -190,7 +192,10 @@ function Itinerary() {
                     alt={item.imageAlt}
                     loading="lazy"
                     decoding="async"
-                    className="block h-auto w-full rounded-sm object-contain"
+                    className={
+                      item.imageClassName ??
+                      "block h-auto w-full rounded-sm object-contain"
+                    }
                   />
                   {item.mapUrl ? (
                     <Button
