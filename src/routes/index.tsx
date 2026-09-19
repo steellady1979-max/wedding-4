@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { VideoIntro } from "@/components/wedding/VideoIntro";
-import { submitRsvp } from "@/lib/rsvp.functions";
+import { submitRsvp, submitWish } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -269,7 +269,6 @@ function Countdown({ onHero = false }: { onHero?: boolean }) {
 function Rsvp() {
   const [name, setName] = useState("");
   const [answer, setAnswer] = useState<"yes" | "no" | null>(null);
-  const [wish, setWish] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const submit = useServerFn(submitRsvp);
 
@@ -279,7 +278,6 @@ function Rsvp() {
         data: {
           name: name.trim(),
           attending: answer ?? "no",
-          wish: wish.trim(),
           company: honeypot,
         },
       }),
@@ -287,14 +285,9 @@ function Rsvp() {
 
   if (mutation.isSuccess) {
     return (
-      <div className="relative flex min-h-72 w-full max-w-md items-center justify-center text-center" aria-live="polite">
-        <span className="wish-star wish-star-new" aria-hidden="true" />
-        <div className="relative z-10 mt-36 max-w-sm">
-          <p className="font-display text-3xl text-starlight">{name.trim()}</p>
-          <p className="mt-3 text-sm leading-relaxed text-night-muted">
-            შენი სურვილი ცაზე ვარსკვლავად აინთო
-          </p>
-        </div>
+      <div className="max-w-sm py-10 text-center" aria-live="polite">
+        <p className="font-display text-3xl text-foreground">მადლობა, {name.trim()}</p>
+        <p className="mt-3 text-sm text-muted-foreground">თქვენი პასუხი მიღებულია</p>
       </div>
     );
   }
@@ -303,7 +296,7 @@ function Rsvp() {
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        if (!name.trim() || !answer || !wish.trim()) return;
+        if (!name.trim() || !answer) return;
         mutation.mutate();
       }}
       className="flex w-full max-w-sm flex-col items-center gap-6"
@@ -313,17 +306,8 @@ function Rsvp() {
         onChange={(event) => setName(event.target.value)}
         placeholder="სახელი / გვარი"
         aria-label="სახელი / გვარი"
-        className="h-12 rounded-none border-0 border-b border-starlight/30 bg-transparent text-center text-base text-starlight shadow-none placeholder:text-night-muted focus-visible:ring-0"
-      />
-
-      <textarea
-        value={wish}
-        onChange={(event) => setWish(event.target.value)}
-        placeholder="დაწერე სურვილი..."
-        aria-label="სურვილი"
-        maxLength={500}
-        rows={4}
-        className="w-full resize-none rounded-none border border-starlight/25 bg-night/40 px-4 py-3 text-sm leading-relaxed text-starlight outline-none transition-colors placeholder:text-night-muted focus:border-starlight/60"
+        maxLength={80}
+        className="h-12 rounded-none border-0 border-b border-border bg-transparent text-center text-base shadow-none focus-visible:ring-0"
       />
 
       <input
@@ -351,8 +335,8 @@ function Rsvp() {
             onClick={() => setAnswer(option.key)}
             className={`h-12 flex-1 rounded-none px-3 text-[0.65rem] uppercase tracking-[0.2em] ${
               answer === option.key
-                ? "border-starlight bg-starlight text-night"
-                : "border-starlight/35 bg-transparent text-starlight hover:bg-starlight/10 hover:text-starlight"
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-primary/40 bg-transparent text-foreground hover:bg-primary/10"
             }`}
           >
             {option.label}
@@ -362,18 +346,63 @@ function Rsvp() {
 
       <Button
         type="submit"
-        disabled={!name.trim() || !answer || !wish.trim() || mutation.isPending}
+        disabled={!name.trim() || !answer || mutation.isPending}
         className="h-12 w-full rounded-none bg-primary text-[0.65rem] uppercase tracking-[0.35em] text-primary-foreground hover:bg-primary/90"
       >
         {mutation.isPending ? "იგზავნება…" : "დადასტურება"}
       </Button>
 
       {mutation.isError ? (
-        <p className="text-center text-xs leading-relaxed text-starlight">
+        <p className="text-center text-xs leading-relaxed text-muted-foreground">
           პასუხის შენახვა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან.
         </p>
       ) : null}
     </form>
+  );
+}
+
+function WishForm() {
+  const [name, setName] = useState("");
+  const [wish, setWish] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+  const submit = useServerFn(submitWish);
+  const mutation = useMutation({
+    mutationFn: () => submit({ data: { name: name.trim(), wish: wish.trim(), company: honeypot } }),
+  });
+
+  if (mutation.isSuccess) {
+    return (
+      <div className="relative flex min-h-72 w-full max-w-md items-center justify-center text-center" aria-live="polite">
+        <span className="wish-star wish-star-new" aria-hidden="true" />
+        <span className="wish-heart" aria-hidden="true">♡</span>
+        <div className="relative z-10 mt-40 max-w-sm">
+          <p className="font-display text-3xl text-starlight">{name.trim()}</p>
+          <p className="mt-3 text-sm leading-relaxed text-night-muted">შენი სურვილი ცაზე ვარსკვლავად აინთო</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={(event) => { event.preventDefault(); if (name.trim() && wish.trim()) mutation.mutate(); }} className="flex w-full max-w-sm flex-col gap-5">
+      <Input value={name} onChange={(event) => setName(event.target.value)} placeholder="სახელი / გვარი" aria-label="სურვილის ავტორი" maxLength={80} className="h-12 rounded-none border-0 border-b border-starlight/30 bg-transparent text-center text-starlight shadow-none placeholder:text-night-muted focus-visible:ring-0" />
+      <textarea value={wish} onChange={(event) => setWish(event.target.value)} placeholder="დაწერე სურვილი..." aria-label="სურვილი" minLength={2} maxLength={500} rows={4} className="w-full resize-none rounded-none border border-starlight/25 bg-night/40 px-4 py-3 text-sm leading-relaxed text-starlight outline-none transition-colors placeholder:text-night-muted focus:border-starlight/60" />
+      <input type="text" name="website" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} tabIndex={-1} autoComplete="off" aria-hidden="true" className="pointer-events-none absolute h-0 w-0 opacity-0" />
+      <Button type="submit" disabled={!name.trim() || !wish.trim() || mutation.isPending} className="h-12 rounded-none bg-primary text-[0.65rem] uppercase tracking-[0.3em] text-primary-foreground hover:bg-primary/90">{mutation.isPending ? "ინთება…" : "აანთე ვარსკვლავი"}</Button>
+      {mutation.isError ? <p className="text-center text-xs text-night-muted">სურვილის შენახვა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან.</p> : null}
+    </form>
+  );
+}
+
+function RsvpSection() {
+  return (
+    <section className="relative z-10 border-t border-border px-6 py-24">
+      <div className="mx-auto flex max-w-xl flex-col items-center gap-9 text-center">
+        <SectionTitle>დასწრების დადასტურება</SectionTitle>
+        <Reveal className="w-full max-w-[12rem]"><img src={champagneTowerAsset.url} alt="შამპანურის ბოკალების სადღესასწაულო ილუსტრაცია" loading="lazy" decoding="async" className="h-auto w-full object-contain" /></Reveal>
+        <Rsvp />
+      </div>
+    </section>
   );
 }
 
@@ -387,17 +416,8 @@ function WishSky() {
       </div>
       <div className="relative z-10 mx-auto flex max-w-xl flex-col items-center gap-10 text-center">
         <span className="text-[0.6rem] uppercase tracking-[0.5em] text-night-muted">
-          დასწრების დადასტურება
+          სურვილების ცა
         </span>
-        <Reveal className="w-full max-w-[12rem]">
-          <img
-            src={champagneTowerAsset.url}
-            alt="შამპანურის ბოკალების სადღესასწაულო ილუსტრაცია"
-            loading="lazy"
-            decoding="async"
-            className="h-auto w-full object-contain"
-          />
-        </Reveal>
         <div>
           <h2 className="font-display text-4xl leading-tight text-starlight sm:text-5xl">
             დატოვე სურვილი ცაზე
@@ -406,7 +426,7 @@ function WishSky() {
             გაგვიზიარე შენი თბილი სურვილი და აანთე ახალი ვარსკვლავი ჩვენს ცაზე
           </p>
         </div>
-        <Rsvp />
+        <WishForm />
       </div>
     </section>
   );
@@ -591,6 +611,7 @@ function Index() {
           </div>
         </section>
 
+        <RsvpSection />
         <WishSky />
 
         <footer className="relative z-10 border-t border-primary/30 bg-primary px-6 py-12 text-center text-primary-foreground">
