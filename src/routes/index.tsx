@@ -663,7 +663,7 @@ function Index() {
                ვილა მოსავალი
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-               ცერემონია გაიმართება ღია ცის ქვეშ.
+               ხელმოწერის ცერემონია გაიმართება ღია ცის ქვეშ
             </p>
             <div className="aspect-[4/3] w-full overflow-hidden border border-border sm:aspect-[16/9]">
               <iframe
