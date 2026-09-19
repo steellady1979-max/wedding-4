@@ -22,7 +22,6 @@ import sioniAsset from "@/assets/sioni-cathedral.jpg.asset.json";
 import ceremonyAsset from "@/assets/outdoor-ceremony.jpg.asset.json";
 import waltzStillAsset from "@/assets/waltz-still.jpg.asset.json";
 import galaDinnerAsset from "@/assets/gala-dinner.jpg.asset.json";
-import dressCodeAsset from "@/assets/dress-code-guests.png.asset.json";
 import champagneTowerAsset from "@/assets/champagne-tower.png.asset.json";
 import petalFieldAsset from "@/assets/rose-petal-field.png.asset.json";
 import envelopeVideoAsset from "@/assets/wedding-envelope.mp4.asset.json";
@@ -36,7 +35,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "ლევანისა და თამთას ქორწილი 18 ოქტომბერს ვილა მოსავალში. დღის განრიგი, დრესკოდი და დასწრების დადასტურება.",
+          "ლევანისა და თამთას ქორწილი 18 ოქტომბერს ვილა მოსავალში. დღის განრიგი და დასწრების დადასტურება.",
       },
       { property: "og:title", content: "ლევანი & თამთა — 18 ოქტომბერი" },
       {
@@ -100,11 +99,9 @@ const TIMELINE: TimelineItem[] = [
 function Reveal({
   children,
   className = "",
-  fromRight = false,
 }: {
   children: ReactNode;
   className?: string;
-  fromRight?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -128,7 +125,7 @@ function Reveal({
   return (
     <div
       ref={ref}
-      className={`${fromRight ? "reveal-dance" : "reveal-soft"} ${visible ? "is-visible" : ""} ${className}`}
+      className={`reveal-soft ${visible ? "is-visible" : ""} ${className}`}
     >
       {children}
     </div>
@@ -624,28 +621,6 @@ function Index() {
           <div className="mx-auto flex max-w-2xl flex-col items-center gap-12">
             <SectionTitle>დღის განრიგი</SectionTitle>
             <Itinerary />
-          </div>
-        </section>
-
-        {/* Dress code */}
-        <section className="relative z-10 border-t border-border px-6 py-24">
-          <div className="mx-auto flex max-w-xl flex-col items-center gap-8 text-center">
-            <SectionTitle>დრესკოდი</SectionTitle>
-            <h2 className="sparkle-heading font-display text-4xl text-foreground">
-              კლასიკური ელეგანტურობა
-            </h2>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              ძვირფასო სტუმრებო, გთხოვთ აირჩიოთ კლასიკური და ელეგანტური სამოსი
-            </p>
-            <Reveal fromRight className="mt-2 w-full max-w-sm">
-              <img
-                src={dressCodeAsset.url}
-                alt="კლასიკური და ელეგანტური საქორწილო სამოსის აკვარელური ილუსტრაცია"
-                loading="lazy"
-                decoding="async"
-                className="h-auto w-full object-contain"
-              />
-            </Reveal>
           </div>
         </section>
 

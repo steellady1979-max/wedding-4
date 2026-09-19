@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import videoAsset from "@/assets/wedding-levani-tamta-intro.mp4.asset.json";
 
 const PETALS = [
   { left: "4%", delay: "0s", duration: "9s", size: "0.7rem" },
@@ -19,6 +18,8 @@ export function VideoIntro({
   onFinish: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [started, setStarted] = useState(false);
+  const [buffering, setBuffering] = useState(false);
   const [leaving, setLeaving] = useState(false);
 
   const finishRef = useRef(false);
@@ -29,31 +30,37 @@ export function VideoIntro({
     window.setTimeout(onFinish, 900);
   };
 
-  const handleInteraction = () => {
-    finish();
+  const start = () => {
+    const video = videoRef.current;
+    if (!video || started) return;
+
+    setStarted(true);
+    setBuffering(true);
+    video.currentTime = 0;
+    void video.play().catch(finish);
   };
 
   useEffect(() => {
-    videoRef.current?.play().catch(() => {});
-    // Safety net: never trap the guest on the intro if the video stalls.
-    const id = window.setTimeout(finish, 8000);
+    // Never trap a guest on the intro, even if loading or playback stalls.
+    const id = window.setTimeout(finish, started ? 12000 : 20000);
     return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [started]);
 
   return (
     <div
-      onClick={handleInteraction}
-      className={`fixed inset-0 z-50 cursor-pointer bg-foreground transition-opacity duration-[900ms] ${
+      className={`fixed inset-0 z-50 bg-foreground transition-opacity duration-[900ms] ${
         leaving ? "opacity-0" : "opacity-100"
       }`}
     >
       <video
         ref={videoRef}
-        src={videoAsset.url}
-        autoPlay
+        src="/video/wedding-intro.mp4"
         muted
         playsInline
+        preload="auto"
+        onPlaying={() => setBuffering(false)}
+        onWaiting={() => setBuffering(true)}
         onEnded={finish}
         onError={finish}
         className="h-full w-full object-cover opacity-90"
@@ -76,7 +83,7 @@ export function VideoIntro({
         ))}
       </div>
 
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-6 bg-black/25 px-6 text-center">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-black/25 px-6 text-center">
         <p className="animate-fade-in text-[0.7rem] uppercase tracking-[0.55em] text-white/80">
           18 ოქტომბერი
         </p>
@@ -84,7 +91,30 @@ export function VideoIntro({
           ლევანი &amp; თამთა
         </h1>
         <div className="hairline w-28 opacity-80" />
+        {!started ? (
+          <button
+            type="button"
+            onClick={start}
+            className="mt-4 border border-white/70 bg-black/20 px-7 py-3 text-[0.65rem] uppercase tracking-[0.3em] text-white transition-colors hover:bg-white/15"
+          >
+            შესვლა და მუსიკის ჩართვა
+          </button>
+        ) : buffering ? (
+          <p className="mt-4 text-xs tracking-[0.18em] text-white/75" role="status">
+            ვიდეო იტვირთება…
+          </p>
+        ) : null}
       </div>
+
+      {started ? (
+        <button
+          type="button"
+          onClick={finish}
+          className="absolute right-5 top-5 border border-white/50 bg-black/25 px-4 py-2 text-[0.6rem] uppercase tracking-[0.25em] text-white"
+        >
+          გამოტოვება
+        </button>
+      ) : null}
     </div>
   );
 }

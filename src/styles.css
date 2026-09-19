@@ -206,26 +206,16 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.reveal-soft,
-.reveal-dance {
+.reveal-soft {
   opacity: 0;
   will-change: opacity, transform;
-}
-
-.reveal-soft {
   transform: translateY(1.25rem);
   transition: opacity 1.4s ease-out, transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.reveal-dance {
-  transform: translateX(5rem) rotate(4deg);
-  transition: opacity 1.6s ease-out, transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.reveal-soft.is-visible,
-.reveal-dance.is-visible {
+.reveal-soft.is-visible {
   opacity: 1;
-  transform: translate(0) rotate(0);
+  transform: translateY(0);
 }
 
 .sparkle-heading {
@@ -444,8 +434,7 @@
   .sparkle-heading::before,
   .sparkle-heading::after { animation: none; opacity: 0; }
 
-  .reveal-soft,
-  .reveal-dance { opacity: 1; transform: none; transition: none; }
+  .reveal-soft { opacity: 1; transform: none; transition: none; }
 
   .itinerary-panel { transition: none; }
 
