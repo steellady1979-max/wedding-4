@@ -51,3 +51,12 @@
 - [x] Restore the attendance confirmation form and Google Sheet submission
 - [x] Keep the supplied champagne illustration inside the RSVP section
 - [x] Verify the restored form and illustration on mobile and desktop
+
+## Compact itinerary and olive branding
+
+- [x] Replace the itinerary with a closed-by-default accordion
+- [x] Add the supplied falling petals across the landing page
+- [x] Add the supplied envelope video before the location
+- [x] Restyle buttons and footer in olive green
+- [x] Add the supplied monogram before the footer names
+- [x] Verify mobile and desktop layout and interactions
