@@ -480,7 +480,7 @@ function MusicPlayer() {
   const play = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (!hasStartedRef.current) {
+    if (!hasStartedRef.current && audio.readyState > 0) {
       audio.currentTime = 13;
       hasStartedRef.current = true;
     }
@@ -488,9 +488,14 @@ function MusicPlayer() {
   }, []);
 
   useEffect(() => {
+    play();
+    const retry = window.setTimeout(play, 600);
     const startMusic = () => play();
     document.addEventListener("pointerdown", startMusic, { once: true });
-    return () => document.removeEventListener("pointerdown", startMusic);
+    return () => {
+      window.clearTimeout(retry);
+      document.removeEventListener("pointerdown", startMusic);
+    };
   }, [play]);
 
   return (
@@ -498,11 +503,16 @@ function MusicPlayer() {
       <audio
         ref={audioRef}
         src="/music/when-i-fall-in-love.mp3"
+        autoPlay
         loop
         preload="metadata"
         onLoadedMetadata={() => {
           if (!hasStartedRef.current && audioRef.current) {
             audioRef.current.currentTime = 13;
+            hasStartedRef.current = true;
+          }
+          if (audioRef.current?.paused) {
+            play();
           }
         }}
         onPlay={() => setPlaying(true)}
