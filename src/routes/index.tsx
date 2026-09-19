@@ -269,23 +269,33 @@ function Countdown({ onHero = false }: { onHero?: boolean }) {
 function Rsvp() {
   const [name, setName] = useState("");
   const [answer, setAnswer] = useState<"yes" | "no" | null>(null);
+  const [wish, setWish] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const submit = useServerFn(submitRsvp);
 
   const mutation = useMutation({
     mutationFn: () =>
       submit({
-        data: { name: name.trim(), attending: answer ?? "no", company: honeypot },
+        data: {
+          name: name.trim(),
+          attending: answer ?? "no",
+          wish: wish.trim(),
+          company: honeypot,
+        },
       }),
   });
 
   if (mutation.isSuccess) {
     return (
-      <p className="max-w-md text-center text-sm leading-relaxed text-muted-foreground">
-        {answer === "yes"
-          ? `გმადლობთ, ${name.trim()}. მოუთმენლად გელოდებით 18 ოქტომბერს.`
-          : `გმადლობთ პასუხისთვის, ${name.trim()}. ვწუხვართ, რომ ვერ შეხვდებით.`}
-      </p>
+      <div className="relative flex min-h-72 w-full max-w-md items-center justify-center text-center" aria-live="polite">
+        <span className="wish-star wish-star-new" aria-hidden="true" />
+        <div className="relative z-10 mt-36 max-w-sm">
+          <p className="font-display text-3xl text-starlight">{name.trim()}</p>
+          <p className="mt-3 text-sm leading-relaxed text-night-muted">
+            შენი სურვილი ცაზე ვარსკვლავად აინთო
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -293,7 +303,7 @@ function Rsvp() {
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        if (!name.trim() || !answer) return;
+        if (!name.trim() || !answer || !wish.trim()) return;
         mutation.mutate();
       }}
       className="flex w-full max-w-sm flex-col items-center gap-6"
@@ -303,7 +313,17 @@ function Rsvp() {
         onChange={(event) => setName(event.target.value)}
         placeholder="სახელი / გვარი"
         aria-label="სახელი / გვარი"
-        className="h-12 rounded-none border-0 border-b border-border bg-transparent text-center text-base shadow-none focus-visible:ring-0"
+        className="h-12 rounded-none border-0 border-b border-starlight/30 bg-transparent text-center text-base text-starlight shadow-none placeholder:text-night-muted focus-visible:ring-0"
+      />
+
+      <textarea
+        value={wish}
+        onChange={(event) => setWish(event.target.value)}
+        placeholder="დაწერე სურვილი..."
+        aria-label="სურვილი"
+        maxLength={500}
+        rows={4}
+        className="w-full resize-none rounded-none border border-starlight/25 bg-night/40 px-4 py-3 text-sm leading-relaxed text-starlight outline-none transition-colors placeholder:text-night-muted focus:border-starlight/60"
       />
 
       <input
@@ -331,8 +351,8 @@ function Rsvp() {
             onClick={() => setAnswer(option.key)}
             className={`h-12 flex-1 rounded-none px-3 text-[0.65rem] uppercase tracking-[0.2em] ${
               answer === option.key
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-primary/40 text-primary hover:bg-primary/10 hover:text-primary"
+                ? "border-starlight bg-starlight text-night"
+                : "border-starlight/35 bg-transparent text-starlight hover:bg-starlight/10 hover:text-starlight"
             }`}
           >
             {option.label}
@@ -342,18 +362,53 @@ function Rsvp() {
 
       <Button
         type="submit"
-        disabled={!name.trim() || !answer || mutation.isPending}
-        className="h-12 w-full rounded-none text-[0.65rem] uppercase tracking-[0.35em]"
+        disabled={!name.trim() || !answer || !wish.trim() || mutation.isPending}
+        className="h-12 w-full rounded-none bg-primary text-[0.65rem] uppercase tracking-[0.35em] text-primary-foreground hover:bg-primary/90"
       >
         {mutation.isPending ? "იგზავნება…" : "დადასტურება"}
       </Button>
 
       {mutation.isError ? (
-        <p className="text-center text-xs leading-relaxed text-destructive">
+        <p className="text-center text-xs leading-relaxed text-starlight">
           პასუხის შენახვა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან.
         </p>
       ) : null}
     </form>
+  );
+}
+
+function WishSky() {
+  return (
+    <section className="wish-sky relative z-10 overflow-hidden border-t border-starlight/15 bg-night px-6 py-24 text-starlight">
+      <div className="wish-stars" aria-hidden="true">
+        {Array.from({ length: 26 }, (_, index) => (
+          <span key={index} className="wish-star" />
+        ))}
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-xl flex-col items-center gap-10 text-center">
+        <span className="text-[0.6rem] uppercase tracking-[0.5em] text-night-muted">
+          დასწრების დადასტურება
+        </span>
+        <Reveal className="w-full max-w-[12rem]">
+          <img
+            src={champagneTowerAsset.url}
+            alt="შამპანურის ბოკალების სადღესასწაულო ილუსტრაცია"
+            loading="lazy"
+            decoding="async"
+            className="h-auto w-full object-contain"
+          />
+        </Reveal>
+        <div>
+          <h2 className="font-display text-4xl leading-tight text-starlight sm:text-5xl">
+            დატოვე სურვილი ცაზე
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-night-muted">
+            გაგვიზიარე შენი თბილი სურვილი და აანთე ახალი ვარსკვლავი ჩვენს ცაზე
+          </p>
+        </div>
+        <Rsvp />
+      </div>
+    </section>
   );
 }
 
@@ -536,25 +591,7 @@ function Index() {
           </div>
         </section>
 
-        {/* RSVP */}
-        <section className="relative z-10 border-t border-border px-6 py-24">
-          <div className="mx-auto flex max-w-xl flex-col items-center gap-10 text-center">
-            <SectionTitle>დასწრების დადასტურება</SectionTitle>
-            <Reveal className="w-full max-w-[12rem]">
-              <img
-                src={champagneTowerAsset.url}
-                alt="შამპანურის ბოკალების სადღესასწაულო ილუსტრაცია"
-                loading="lazy"
-                decoding="async"
-                className="h-auto w-full object-contain"
-              />
-            </Reveal>
-            <h2 className="sparkle-heading font-display text-4xl text-foreground">
-              გვაცნობეთ თქვენი პასუხი
-            </h2>
-            <Rsvp />
-          </div>
-        </section>
+        <WishSky />
 
         <footer className="relative z-10 border-t border-primary/30 bg-primary px-6 py-12 text-center text-primary-foreground">
           <img
