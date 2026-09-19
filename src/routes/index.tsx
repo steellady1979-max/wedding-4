@@ -387,11 +387,10 @@ function WishForm() {
   const [wish, setWish] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const submit = useServerFn(submitWish);
-  const submittedName = name.trim() || "ანონიმური სტუმარი";
   const mutation = useMutation({
     mutationFn: () =>
       submit({
-        data: { name: submittedName, wish: wish.trim(), company: honeypot },
+        data: { name: name.trim(), wish: wish.trim(), company: honeypot },
       }),
   });
 
@@ -401,7 +400,7 @@ function WishForm() {
         <span className="wish-star wish-star-new" aria-hidden="true" />
         <span className="wish-heart" aria-hidden="true">♡</span>
         <div className="relative z-10 mt-40 max-w-sm">
-          <p className="font-display text-3xl text-starlight">{submittedName}</p>
+          <p className="font-display text-3xl text-starlight">{name.trim()}</p>
           <p className="mt-3 text-sm leading-relaxed text-night-muted">შენი სურვილი ცაზე ვარსკვლავად აინთო</p>
         </div>
       </div>
@@ -409,11 +408,16 @@ function WishForm() {
   }
 
   return (
-    <form onSubmit={(event) => { event.preventDefault(); if (wish.trim()) mutation.mutate(); }} className="flex w-full max-w-sm flex-col gap-5">
-      <Input value={name} onChange={(event) => setName(event.target.value)} placeholder="სახელი / გვარი (არასავალდებულო)" aria-label="სურვილის ავტორი, არასავალდებულო" maxLength={80} className="h-12 rounded-none border-0 border-b border-starlight/30 bg-transparent text-center text-starlight shadow-none placeholder:text-night-muted focus-visible:ring-0" />
+    <form onSubmit={(event) => { event.preventDefault(); if (name.trim() && wish.trim()) mutation.mutate(); }} className="flex w-full max-w-sm flex-col gap-5">
+      <div className="flex flex-col gap-2">
+        <label htmlFor="wish-name" className="font-display text-xl tracking-wide text-starlight">
+          თქვენი სახელი
+        </label>
+        <Input id="wish-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="სახელი / გვარი" maxLength={80} className="h-12 rounded-none border-0 border-b border-starlight/50 bg-transparent text-center text-starlight shadow-none placeholder:text-night-muted focus-visible:border-starlight focus-visible:ring-0" />
+      </div>
       <textarea value={wish} onChange={(event) => setWish(event.target.value)} placeholder="დაწერე სურვილი..." aria-label="სურვილი" minLength={2} maxLength={500} rows={4} className="w-full resize-none rounded-none border border-starlight/25 bg-night/40 px-4 py-3 text-sm leading-relaxed text-starlight outline-none transition-colors placeholder:text-night-muted focus:border-starlight/60" />
       <input type="text" name="website" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} tabIndex={-1} autoComplete="off" aria-hidden="true" className="pointer-events-none absolute h-0 w-0 opacity-0" />
-      <Button type="submit" disabled={!wish.trim() || mutation.isPending} className="h-12 rounded-none bg-primary text-[0.65rem] uppercase tracking-[0.3em] text-primary-foreground hover:bg-primary/90">{mutation.isPending ? "ინთება…" : "აანთე ვარსკვლავი"}</Button>
+      <Button type="submit" disabled={!name.trim() || !wish.trim() || mutation.isPending} className="h-12 rounded-none bg-primary text-[0.65rem] uppercase tracking-[0.3em] text-primary-foreground hover:bg-primary/90">{mutation.isPending ? "ინთება…" : "აანთე ვარსკვლავი"}</Button>
       {mutation.isError ? <p className="text-center text-xs text-night-muted">სურვილის შენახვა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან.</p> : null}
     </form>
   );
