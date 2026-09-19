@@ -84,5 +84,5 @@
 
 ## Vercel compatibility
 - [x] Make uploaded photos, videos, and the custom font load outside Lovable
-- [ ] Verify the production build and rendered media
-- [ ] Deploy to Vercel when an existing Vercel connection is available
+- [x] Verify the production build and rendered media
+- [ ] Deploy to Vercel — blocked because this workspace has no Vercel connection
