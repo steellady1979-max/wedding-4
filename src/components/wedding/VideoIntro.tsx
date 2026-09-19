@@ -18,7 +18,6 @@ export function VideoIntro({
   onFinish: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [started, setStarted] = useState(false);
   const [buffering, setBuffering] = useState(false);
   const [leaving, setLeaving] = useState(false);
 
@@ -30,22 +29,13 @@ export function VideoIntro({
     window.setTimeout(onFinish, 900);
   };
 
-  const start = () => {
-    const video = videoRef.current;
-    if (!video || started) return;
-
-    setStarted(true);
-    setBuffering(true);
-    video.currentTime = 0;
-    void video.play().catch(finish);
-  };
-
   useEffect(() => {
+    void videoRef.current?.play().catch(finish);
     // Never trap a guest on the intro, even if loading or playback stalls.
-    const id = window.setTimeout(finish, started ? 12000 : 20000);
+    const id = window.setTimeout(finish, 12000);
     return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [started]);
+  }, []);
 
   return (
     <div
@@ -56,6 +46,7 @@ export function VideoIntro({
       <video
         ref={videoRef}
         src="/video/wedding-intro.mp4"
+        autoPlay
         muted
         playsInline
         preload="auto"
@@ -83,7 +74,7 @@ export function VideoIntro({
         ))}
       </div>
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-black/25 px-6 text-center">
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-6 bg-black/25 px-6 text-center">
         <p className="animate-fade-in text-[0.7rem] uppercase tracking-[0.55em] text-white/80">
           18 ოქტომბერი
         </p>
@@ -91,30 +82,20 @@ export function VideoIntro({
           ლევანი &amp; თამთა
         </h1>
         <div className="hairline w-28 opacity-80" />
-        {!started ? (
-          <button
-            type="button"
-            onClick={start}
-            className="mt-4 border border-white/70 bg-black/20 px-7 py-3 text-[0.65rem] uppercase tracking-[0.3em] text-white transition-colors hover:bg-white/15"
-          >
-            შესვლა და მუსიკის ჩართვა
-          </button>
-        ) : buffering ? (
+        {buffering ? (
           <p className="mt-4 text-xs tracking-[0.18em] text-white/75" role="status">
             ვიდეო იტვირთება…
           </p>
         ) : null}
       </div>
 
-      {started ? (
-        <button
-          type="button"
-          onClick={finish}
-          className="absolute right-5 top-5 border border-white/50 bg-black/25 px-4 py-2 text-[0.6rem] uppercase tracking-[0.25em] text-white"
-        >
-          გამოტოვება
-        </button>
-      ) : null}
+      <button
+        type="button"
+        onClick={finish}
+        className="absolute right-5 top-5 border border-white/50 bg-black/25 px-4 py-2 text-[0.6rem] uppercase tracking-[0.25em] text-white"
+      >
+        გამოტოვება
+      </button>
     </div>
   );
 }
