@@ -15,10 +15,8 @@ const PETALS = [
 
 export function VideoIntro({
   onFinish,
-  onFirstInteraction,
 }: {
   onFinish: () => void;
-  onFirstInteraction: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [leaving, setLeaving] = useState(false);
@@ -32,7 +30,6 @@ export function VideoIntro({
   };
 
   const handleInteraction = () => {
-    onFirstInteraction();
     finish();
   };
 

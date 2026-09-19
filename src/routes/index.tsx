@@ -468,38 +468,48 @@ function WaltzVideo() {
   );
 }
 
-function MusicPlayer({ started }: { started: boolean }) {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [playing, setPlaying] = useState(started);
+function MusicPlayer() {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(false);
 
-  useEffect(() => setPlaying(started), [started]);
-
-  if (!started) return null;
-
-  const sendCommand = (command: "playVideo" | "pauseVideo") => {
-    iframeRef.current?.contentWindow?.postMessage(
-      JSON.stringify({ event: "command", func: command, args: [] }),
-      "https://www.youtube-nocookie.com",
-    );
+  const play = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    void audio.play().catch(() => setPlaying(false));
   };
+
+  useEffect(() => {
+    const startMusic = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      void audio.play().catch(() => setPlaying(false));
+    };
+    document.addEventListener("pointerdown", startMusic, { once: true });
+    return () => document.removeEventListener("pointerdown", startMusic);
+  }, []);
 
   return (
     <>
-      <iframe
-        ref={iframeRef}
-        title="საქორწილო მუსიკა"
-        src="https://www.youtube-nocookie.com/embed/GfAb0gNPy6s?autoplay=1&loop=1&playlist=GfAb0gNPy6s&enablejsapi=1&controls=0&playsinline=1"
-        allow="autoplay; encrypted-media"
-        className="pointer-events-none fixed h-px w-px opacity-0"
+      <audio
+        ref={audioRef}
+        src="/music/when-i-fall-in-love.mp3"
+        loop
+        preload="none"
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
       />
       <Button
         type="button"
         size="icon"
         variant="outline"
         onClick={() => {
-          const nextPlaying = !playing;
-          sendCommand(nextPlaying ? "playVideo" : "pauseVideo");
-          setPlaying(nextPlaying);
+          const audio = audioRef.current;
+          if (!audio) return;
+          if (audio.paused) {
+            play();
+          } else {
+            audio.pause();
+          }
         }}
         aria-label={playing ? "მუსიკის შეჩერება" : "მუსიკის ჩართვა"}
         title={playing ? "მუსიკის შეჩერება" : "მუსიკის ჩართვა"}
@@ -513,7 +523,6 @@ function MusicPlayer({ started }: { started: boolean }) {
 
 function Index() {
   const [introDone, setIntroDone] = useState(false);
-  const [musicStarted, setMusicStarted] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = introDone ? "" : "hidden";
@@ -522,19 +531,12 @@ function Index() {
     };
   }, [introDone]);
 
-  useEffect(() => {
-    const startMusic = () => setMusicStarted(true);
-    document.addEventListener("pointerdown", startMusic, { once: true });
-    return () => document.removeEventListener("pointerdown", startMusic);
-  }, []);
-
   return (
     <>
-      <MusicPlayer started={musicStarted} />
+      <MusicPlayer />
       {!introDone && (
         <VideoIntro
           onFinish={() => setIntroDone(true)}
-          onFirstInteraction={() => setMusicStarted(true)}
         />
       )}
 
