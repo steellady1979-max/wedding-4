@@ -75,3 +75,9 @@
 - [x] Add a separate wish-only form available to every guest
 - [x] Save wishes independently and animate a newly lit star
 - [x] Verify both flows on mobile and desktop
+
+## RSVP and wishes separator
+- [x] Add the supplied vertical video between RSVP and wishes
+- [x] Rename the 17:00 event to ხელმოწერის ცერემონია
+- [x] Replace the background music with the supplied YouTube track
+- [x] Verify the new video placement and music control on mobile
