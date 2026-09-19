@@ -7,6 +7,7 @@ import { submitRsvp } from "@/lib/rsvp.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  ChevronDown,
   Church,
   HeartHandshake,
   MapPin,
@@ -22,6 +23,9 @@ import welcomeDrinksAsset from "@/assets/welcome-drinks.jpg.asset.json";
 import galaDinnerAsset from "@/assets/gala-dinner.jpg.asset.json";
 import dressCodeAsset from "@/assets/dress-code-guests.png.asset.json";
 import champagneTowerAsset from "@/assets/champagne-tower.png.asset.json";
+import petalFieldAsset from "@/assets/rose-petal-field.png.asset.json";
+import envelopeVideoAsset from "@/assets/wedding-envelope.mp4.asset.json";
+import monogramAsset from "@/assets/couple-monogram.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -120,9 +124,80 @@ function Reveal({
 function LandingPetals() {
   return (
     <div className="landing-petals" aria-hidden="true">
-      {Array.from({ length: 18 }, (_, index) => (
-        <i key={index} className="landing-petal" />
-      ))}
+      <img src={petalFieldAsset.url} alt="" className="landing-petal-sheet" />
+      <img src={petalFieldAsset.url} alt="" className="landing-petal-sheet landing-petal-sheet-delayed" />
+    </div>
+  );
+}
+
+function Itinerary() {
+  const [openItem, setOpenItem] = useState<string | null>(null);
+
+  return (
+    <div className="w-full border-y border-border">
+      {TIMELINE.map((item) => {
+        const Icon = item.icon;
+        const isOpen = openItem === item.time;
+        const panelId = `itinerary-${item.time.replace(":", "-")}`;
+
+        return (
+          <article key={item.time} className="border-b border-border last:border-b-0">
+            <Button
+              type="button"
+              variant="ghost"
+              aria-expanded={isOpen}
+              aria-controls={panelId}
+              onClick={() => setOpenItem(isOpen ? null : item.time)}
+              className="grid h-auto w-full grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-4 rounded-none px-1 py-5 text-left text-primary hover:bg-primary/5 hover:text-primary sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:px-3"
+            >
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-primary/30">
+                <Icon aria-hidden="true" strokeWidth={1.2} className="h-5 w-5" />
+              </span>
+              <span className="min-w-0">
+                <time className="block text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
+                  {item.time}
+                </time>
+                <span className="mt-1 block font-display text-xl leading-snug text-foreground sm:text-2xl">
+                  {item.title}
+                </span>
+              </span>
+              <ChevronDown
+                aria-hidden="true"
+                className={`h-4 w-4 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+              />
+            </Button>
+
+            <div
+              id={panelId}
+              className={`itinerary-panel ${isOpen ? "is-open" : ""}`}
+            >
+              <div className="itinerary-panel-inner">
+                <div className="pb-6 pl-[4.25rem] pr-1 sm:pl-[5.75rem] sm:pr-3">
+                  <img
+                    src={item.image}
+                    alt={item.imageAlt}
+                    loading="lazy"
+                    decoding="async"
+                    className="block h-auto w-full rounded-sm object-contain"
+                  />
+                  {item.mapUrl ? (
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="mt-3 h-10 rounded-none px-0 text-[0.62rem] uppercase tracking-[0.22em] text-primary hover:bg-transparent hover:text-primary/80"
+                    >
+                      <a href={item.mapUrl} target="_blank" rel="noopener noreferrer">
+                        <MapPin className="h-4 w-4" />
+                        იხილე რუკაზე
+                      </a>
+                    </Button>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
     </div>
   );
 }
@@ -256,8 +331,8 @@ function Rsvp() {
             onClick={() => setAnswer(option.key)}
             className={`h-12 flex-1 rounded-none px-3 text-[0.65rem] uppercase tracking-[0.2em] ${
               answer === option.key
-                ? "border-gold bg-accent text-accent-foreground"
-                : "border-border text-muted-foreground"
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-primary/40 text-primary hover:bg-primary/10 hover:text-primary"
             }`}
           >
             {option.label}
@@ -317,7 +392,7 @@ function MusicPlayer({ started }: { started: boolean }) {
         }}
         aria-label={playing ? "მუსიკის შეჩერება" : "მუსიკის ჩართვა"}
         title={playing ? "მუსიკის შეჩერება" : "მუსიკის ჩართვა"}
-        className="fixed right-5 top-5 z-40 h-11 w-11 rounded-full border-border bg-background/90 shadow-sm"
+        className="fixed right-5 top-5 z-40 h-11 w-11 rounded-full border-primary bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground"
       >
         {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
       </Button>
@@ -380,9 +455,24 @@ function Index() {
           </div>
         </section>
 
+        {/* Wedding envelope */}
+        <section className="relative z-10 border-t border-border px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-sm overflow-hidden rounded-sm">
+            <video
+              src={envelopeVideoAsset.url}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="საქორწილო კონვერტის ანიმაცია"
+              className="block aspect-[808/1138] w-full object-cover"
+            />
+          </div>
+        </section>
 
         {/* Location */}
-        <section className="border-t border-border px-6 py-24">
+        <section className="relative z-10 border-t border-border px-6 py-24">
           <div className="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center">
             <SectionTitle>ლოკაცია</SectionTitle>
             <h2 className="sparkle-heading font-display text-4xl text-foreground sm:text-5xl">
@@ -403,7 +493,7 @@ function Index() {
             <Button
               asChild
               variant="outline"
-              className="h-12 rounded-none border-gold px-8 text-[0.65rem] uppercase tracking-[0.35em]"
+              className="h-12 rounded-none border-primary bg-primary px-8 text-[0.65rem] uppercase tracking-[0.35em] text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
             >
               <a
                  href="https://maps.app.goo.gl/evaofQxhjzTiQbQw8?g_st=ic"
@@ -417,63 +507,15 @@ function Index() {
         </section>
 
         {/* Timeline */}
-        <section className="border-t border-border px-6 py-24">
+        <section className="relative z-10 border-t border-border px-6 py-24">
           <div className="mx-auto flex max-w-2xl flex-col items-center gap-12">
             <SectionTitle>დღის განრიგი</SectionTitle>
-            <ol className="relative w-full before:absolute before:bottom-8 before:left-5 before:top-8 before:w-px before:bg-border sm:before:left-7">
-              {TIMELINE.map((t) => {
-                const Icon = t.icon;
-                return (
-                  <li
-                    key={t.time}
-                    className="relative grid grid-cols-[2.5rem_minmax(0,1fr)] gap-5 pb-16 last:pb-0 sm:grid-cols-[3.5rem_minmax(0,1fr)] sm:gap-7"
-                  >
-                    <div className="relative z-10 flex h-10 w-10 items-center justify-center bg-background sm:h-14 sm:w-14">
-                      <Icon
-                        aria-hidden="true"
-                        strokeWidth={1}
-                        className="h-6 w-6 text-gold sm:h-7 sm:w-7"
-                      />
-                    </div>
-
-                    <article className="min-w-0 pt-0.5 sm:pt-1">
-                      <time className="text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
-                        {t.time}
-                      </time>
-                      <h3 className="mt-1 font-display text-2xl leading-snug text-foreground sm:text-3xl">
-                        {t.title}
-                      </h3>
-                      <Reveal className="mt-5">
-                        <img
-                          src={t.image}
-                          alt={t.imageAlt}
-                          loading="lazy"
-                          decoding="async"
-                          className="block h-auto w-full rounded-sm object-contain"
-                        />
-                      </Reveal>
-                      {t.mapUrl ? (
-                        <Button
-                          asChild
-                          variant="ghost"
-                          className="mt-3 h-10 rounded-none px-0 text-[0.62rem] uppercase tracking-[0.22em] text-muted-foreground"
-                        >
-                          <a href={t.mapUrl} target="_blank" rel="noopener noreferrer">
-                            <MapPin className="h-4 w-4" />
-                            იხილე რუკაზე
-                          </a>
-                        </Button>
-                      ) : null}
-                    </article>
-                  </li>
-                );
-              })}
-            </ol>
+            <Itinerary />
           </div>
         </section>
 
         {/* Dress code */}
-        <section className="border-t border-border px-6 py-24">
+        <section className="relative z-10 border-t border-border px-6 py-24">
           <div className="mx-auto flex max-w-xl flex-col items-center gap-8 text-center">
             <SectionTitle>დრესკოდი</SectionTitle>
             <h2 className="sparkle-heading font-display text-4xl text-foreground">
@@ -495,7 +537,7 @@ function Index() {
         </section>
 
         {/* RSVP */}
-        <section className="border-t border-border px-6 py-24">
+        <section className="relative z-10 border-t border-border px-6 py-24">
           <div className="mx-auto flex max-w-xl flex-col items-center gap-10 text-center">
             <SectionTitle>დასწრების დადასტურება</SectionTitle>
             <Reveal className="w-full max-w-[12rem]">
@@ -514,9 +556,16 @@ function Index() {
           </div>
         </section>
 
-        <footer className="border-t border-border px-6 py-12 text-center">
-          <p className="font-display text-2xl text-foreground">ლევანი &amp; თამთა</p>
-          <p className="mt-2 text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
+        <footer className="relative z-10 border-t border-primary/30 bg-primary px-6 py-12 text-center text-primary-foreground">
+          <img
+            src={monogramAsset.url}
+            alt="ლევანისა და თამთას მონოგრამა"
+            loading="lazy"
+            decoding="async"
+            className="mx-auto mb-4 h-16 w-16 object-contain"
+          />
+          <p className="font-display text-2xl text-primary-foreground">ლევანი &amp; თამთა</p>
+          <p className="mt-2 text-[0.6rem] uppercase tracking-[0.4em] text-primary-foreground/70">
              18.10 · ვილა მოსავალი
           </p>
         </footer>
