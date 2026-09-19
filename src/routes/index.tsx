@@ -25,7 +25,7 @@ import dressCodeAsset from "@/assets/dress-code-guests.png.asset.json";
 import champagneTowerAsset from "@/assets/champagne-tower.png.asset.json";
 import petalFieldAsset from "@/assets/rose-petal-field.png.asset.json";
 import envelopeVideoAsset from "@/assets/wedding-envelope.mp4.asset.json";
-import monogramAsset from "@/assets/couple-monogram.png.asset.json";
+import coupleSealAsset from "@/assets/couple-seal.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -558,11 +558,11 @@ function Index() {
 
         <footer className="relative z-10 border-t border-primary/30 bg-primary px-6 py-12 text-center text-primary-foreground">
           <img
-            src={monogramAsset.url}
+            src={coupleSealAsset.url}
             alt="ლევანისა და თამთას მონოგრამა"
             loading="lazy"
             decoding="async"
-            className="mx-auto mb-5 h-28 w-28 object-contain"
+            className="mx-auto mb-5 h-28 w-28 object-contain mix-blend-screen sm:h-32 sm:w-32"
           />
           <p className="font-display text-2xl text-primary-foreground">ლევანი &amp; თამთა</p>
           <p className="mt-2 text-[0.6rem] uppercase tracking-[0.4em] text-primary-foreground/70">
