@@ -10,6 +10,7 @@ import {
   ChevronDown,
   Church,
   HeartHandshake,
+  type LucideIcon,
   MapPin,
   Pause,
   Play,
@@ -19,7 +20,7 @@ import {
 import villaAsset from "@/assets/vila-mosavali.jpg.asset.json";
 import sioniAsset from "@/assets/sioni-cathedral.jpg.asset.json";
 import ceremonyAsset from "@/assets/outdoor-ceremony.jpg.asset.json";
-import welcomeDrinksAsset from "@/assets/welcome-drinks.jpg.asset.json";
+import waltzStillAsset from "@/assets/waltz-still.jpg.asset.json";
 import galaDinnerAsset from "@/assets/gala-dinner.jpg.asset.json";
 import dressCodeAsset from "@/assets/dress-code-guests.png.asset.json";
 import champagneTowerAsset from "@/assets/champagne-tower.png.asset.json";
