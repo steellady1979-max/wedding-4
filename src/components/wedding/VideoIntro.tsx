@@ -14,11 +14,12 @@ const PETALS = [
 
 export function VideoIntro({
   onFinish,
+  onReady,
 }: {
   onFinish: () => void;
+  onReady: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [buffering, setBuffering] = useState(false);
   const [leaving, setLeaving] = useState(false);
 
   const finishRef = useRef(false);
@@ -50,8 +51,7 @@ export function VideoIntro({
         muted
         playsInline
         preload="auto"
-        onPlaying={() => setBuffering(false)}
-        onWaiting={() => setBuffering(true)}
+        onCanPlay={onReady}
         onEnded={finish}
         onError={finish}
         className="h-full w-full object-cover opacity-90"
@@ -82,11 +82,6 @@ export function VideoIntro({
           ლევანი &amp; თამთა
         </h1>
         <div className="hairline w-28 opacity-80" />
-        {buffering ? (
-          <p className="mt-4 text-xs tracking-[0.18em] text-white/75" role="status">
-            ვიდეო იტვირთება…
-          </p>
-        ) : null}
       </div>
 
       <button

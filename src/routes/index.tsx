@@ -453,18 +453,60 @@ function WishSky() {
   );
 }
 
+function LazyLoopingVideo({
+  src,
+  label,
+  className,
+}: {
+  src: string;
+  label: string;
+  className: string;
+}) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video || !("IntersectionObserver" in window)) {
+      setActive(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setActive(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "240px 0px" },
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      src={active ? src : undefined}
+      autoPlay={active}
+      muted
+      loop
+      playsInline
+      preload="none"
+      aria-label={label}
+      className={className}
+    />
+  );
+}
+
 function WaltzVideo() {
   return (
     <section className="relative z-10 border-t border-border bg-background px-4 py-14 sm:px-6 sm:py-20">
       <div className="mx-auto w-full max-w-sm overflow-hidden rounded-sm">
-        <video
+        <LazyLoopingVideo
           src={magicalWaltzAsset.url}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label="ჯადოსნური საქორწილო ვალსი"
+          label="ჯადოსნური საქორწილო ვალსი"
           className="block aspect-[9/16] h-auto w-full object-contain"
         />
       </div>
@@ -472,7 +514,7 @@ function WaltzVideo() {
   );
 }
 
-function MusicPlayer() {
+function MusicPlayer({ autoplayRequested }: { autoplayRequested: boolean }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const hasStartedRef = useRef(false);
   const [playing, setPlaying] = useState(false);
@@ -488,22 +530,24 @@ function MusicPlayer() {
   }, []);
 
   useEffect(() => {
-    play();
-    const retry = window.setTimeout(play, 600);
     const startMusic = () => play();
     document.addEventListener("pointerdown", startMusic, { once: true });
-    return () => {
-      window.clearTimeout(retry);
-      document.removeEventListener("pointerdown", startMusic);
-    };
+    return () => document.removeEventListener("pointerdown", startMusic);
   }, [play]);
+
+  useEffect(() => {
+    if (!autoplayRequested) return;
+    play();
+    const retry = window.setTimeout(play, 600);
+    return () => window.clearTimeout(retry);
+  }, [autoplayRequested, play]);
 
   return (
     <>
       <audio
         ref={audioRef}
         src="/music/when-i-fall-in-love.mp3"
-        autoPlay
+        autoPlay={autoplayRequested}
         loop
         preload="metadata"
         onLoadedMetadata={() => {
@@ -543,6 +587,7 @@ function MusicPlayer() {
 
 function Index() {
   const [introDone, setIntroDone] = useState(false);
+  const [introReady, setIntroReady] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = introDone ? "" : "hidden";
@@ -553,10 +598,11 @@ function Index() {
 
   return (
     <>
-      <MusicPlayer />
+      <MusicPlayer autoplayRequested={introReady} />
       {!introDone && (
         <VideoIntro
           onFinish={() => setIntroDone(true)}
+          onReady={() => setIntroReady(true)}
         />
       )}
 
@@ -591,14 +637,9 @@ function Index() {
         {/* Wedding envelope */}
         <section className="relative z-10 border-t border-border px-6 py-16 sm:py-20">
           <div className="mx-auto max-w-sm overflow-hidden rounded-sm">
-            <video
+            <LazyLoopingVideo
               src={envelopeVideoAsset.url}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-label="საქორწილო კონვერტის ანიმაცია"
+              label="საქორწილო კონვერტის ანიმაცია"
               className="block aspect-[808/1138] w-full object-cover"
             />
           </div>
