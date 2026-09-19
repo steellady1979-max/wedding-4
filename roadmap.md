@@ -59,4 +59,4 @@
 - [x] Add the supplied envelope video before the location
 - [x] Restyle buttons and footer in olive green
 - [x] Add the supplied monogram before the footer names
-- [ ] Verify mobile and desktop layout and interactions
+- [x] Verify mobile and desktop layout and interactions
